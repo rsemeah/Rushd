@@ -42,7 +42,7 @@ export function StateEntryScreen({
       <header className="flex items-center gap-3 px-6 pt-6 pb-2">
         <button
           onClick={onBack}
-          className="text-muted-foreground transition-colors hover:text-foreground"
+          className="text-muted-foreground transition-colors hover:text-primary"
           aria-label="Go back"
         >
           <ArrowLeft className="h-5 w-5" strokeWidth={1.5} />
@@ -51,7 +51,9 @@ export function StateEntryScreen({
 
       <main className="flex-1 px-6 pt-4">
         {/* Title */}
-        <h2 className="text-2xl font-semibold tracking-tight text-foreground">
+        <h2 className="text-2xl font-semibold tracking-tight text-foreground"
+            style={{ fontFamily: "'Playfair Display', serif" }}
+        >
           {"What's pulling at you right now?"}
         </h2>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
@@ -68,8 +70,8 @@ export function StateEntryScreen({
                 onClick={() => onToggleState(state.id)}
                 className={`rounded-xl px-4 py-4 text-left text-sm font-medium transition-all ${
                   isSelected
-                    ? "border-2 border-primary bg-primary/5 text-foreground"
-                    : "border border-border bg-card text-foreground hover:border-muted-foreground/30"
+                    ? "border-2 border-primary bg-primary/10 text-primary"
+                    : "border border-border bg-card text-foreground hover:border-primary/30"
                 }`}
                 aria-pressed={isSelected}
               >
@@ -85,7 +87,7 @@ export function StateEntryScreen({
             value={localFreeText}
             onChange={(e) => handleFreeTextChange(e.target.value)}
             placeholder="Or describe it in your own words..."
-            className="w-full resize-none rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/20"
+            className="w-full resize-none rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/30"
             rows={3}
           />
         </div>
@@ -94,7 +96,7 @@ export function StateEntryScreen({
         <Button
           onClick={onFindName}
           disabled={!canProceed}
-          className="mt-8 w-full rounded-lg bg-primary py-6 text-base font-medium text-primary-foreground transition-all hover:opacity-90 disabled:opacity-40"
+          className="mt-8 w-full rounded-xl bg-primary py-6 text-base font-semibold text-primary-foreground tracking-wide transition-all hover:bg-gold-dark active:scale-[0.98] disabled:opacity-30"
         >
           Find my Name
         </Button>

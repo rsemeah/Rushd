@@ -8,18 +8,27 @@ interface CrisisScreenProps {
 
 export function CrisisScreen({ onContinue }: CrisisScreenProps) {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-primary px-8">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-secondary px-8">
       <div className="max-w-sm text-center">
-        <h2 className="text-2xl font-semibold tracking-tight text-primary-foreground">
+        {/* Gold diamond accent */}
+        <div className="flex justify-center mb-6">
+          <svg className="h-6 w-6 text-primary" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2L14 10L22 12L14 14L12 22L10 14L2 12L10 10Z" />
+          </svg>
+        </div>
+
+        <h2 className="text-2xl font-semibold tracking-tight text-foreground"
+            style={{ fontFamily: "'Playfair Display', serif" }}
+        >
           We see you.
         </h2>
-        <p className="mt-4 text-base leading-relaxed text-primary-foreground/80">
+        <p className="mt-4 text-base leading-relaxed text-muted-foreground">
           {"What you're feeling right now matters. You don't have to carry this alone."}
         </p>
 
         <Button
           asChild
-          className="mt-10 w-full rounded-lg bg-primary-foreground py-6 text-base font-medium text-primary transition-all hover:opacity-90"
+          className="mt-10 w-full rounded-xl bg-primary py-6 text-base font-semibold text-primary-foreground tracking-wide transition-all hover:bg-gold-dark active:scale-[0.98]"
         >
           <a href="tel:988" aria-label="Call crisis hotline">
             Talk to someone now
@@ -28,7 +37,7 @@ export function CrisisScreen({ onContinue }: CrisisScreenProps) {
 
         <button
           onClick={onContinue}
-          className="mt-6 text-sm text-primary-foreground/50 underline-offset-4 transition-colors hover:text-primary-foreground/70 hover:underline"
+          className="mt-6 text-sm text-muted-foreground underline-offset-4 transition-colors hover:text-primary hover:underline"
         >
           Continue to Rushd
         </button>

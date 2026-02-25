@@ -1,11 +1,17 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, Playfair_Display } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
 const _inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
+})
+
+const _playfair = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-playfair',
+  weight: ['400', '500', '600', '700'],
 })
 
 export const metadata: Metadata = {
@@ -32,7 +38,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#1B2A4A',
+  themeColor: '#0B1120',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
@@ -48,7 +54,7 @@ export default function RootLayout({
     <html lang="en" dir="ltr">
       <head>
         <link
-          href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
       </head>
