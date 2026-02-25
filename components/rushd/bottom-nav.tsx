@@ -1,6 +1,6 @@
 "use client"
 
-import { Home, BookOpen, TrendingUp } from "lucide-react"
+import { Home, BookOpen, BarChart2 } from "lucide-react"
 import type { Screen } from "@/lib/app-state"
 
 interface BottomNavProps {
@@ -12,16 +12,16 @@ export function BottomNav({ currentScreen, onNavigate }: BottomNavProps) {
   const items = [
     { screen: "home" as Screen, icon: Home, label: "Home" },
     { screen: "state-entry" as Screen, icon: BookOpen, label: "Session" },
-    { screen: "progress" as Screen, icon: TrendingUp, label: "Progress" },
+    { screen: "progress" as Screen, icon: BarChart2, label: "Progress" },
   ]
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-card/95 backdrop-blur-sm"
+      className="fixed bottom-0 left-0 right-0 z-50 border-t border-rule bg-background"
       role="navigation"
       aria-label="Main navigation"
     >
-      <div className="mx-auto flex max-w-md items-center justify-around px-6 py-3">
+      <div className="mx-auto flex max-w-md items-center justify-around py-4">
         {items.map((item) => {
           const isActive =
             currentScreen === item.screen ||
@@ -31,18 +31,15 @@ export function BottomNav({ currentScreen, onNavigate }: BottomNavProps) {
             <button
               key={item.screen}
               onClick={() => onNavigate(item.screen)}
-              className={`flex flex-col items-center gap-1 transition-colors ${
+              className={`transition-colors ${
                 isActive
-                  ? "text-primary"
+                  ? "text-gold"
                   : "text-muted-foreground hover:text-foreground"
               }`}
               aria-current={isActive ? "page" : undefined}
               aria-label={item.label}
             >
-              <item.icon className="h-5 w-5" strokeWidth={isActive ? 2.5 : 1.5} />
-              <span className="text-[11px] font-medium tracking-wide">
-                {item.label}
-              </span>
+              <item.icon className="h-5 w-5" strokeWidth={isActive ? 2 : 1.5} />
             </button>
           )
         })}

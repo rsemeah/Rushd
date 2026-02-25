@@ -1,7 +1,6 @@
 "use client"
 
 import { ArrowLeft, ShieldCheck } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import type { NameOfAllah } from "@/lib/names-data"
 
 interface OutputScreenProps {
@@ -11,169 +10,129 @@ interface OutputScreenProps {
   onBack: () => void
 }
 
-function PillarSection({
-  label,
-  content,
-}: {
-  label: string
-  content: string
-}) {
+function Section({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <section className="py-5">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
+    <section className="py-6 border-b border-rule">
+      <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-muted-foreground mb-3">
         {label}
       </p>
-      <p className="mt-2.5 text-sm leading-relaxed text-foreground">{content}</p>
+      <div className="text-sm leading-relaxed text-foreground/90">{children}</div>
     </section>
-  )
-}
-
-function PillarDivider() {
-  return (
-    <div className="flex items-center gap-3">
-      <div className="flex-1 h-px bg-border" />
-      <svg className="h-2 w-2 text-primary/40" viewBox="0 0 8 8" fill="currentColor">
-        <path d="M4 0L5 3L8 4L5 5L4 8L3 5L0 4L3 3Z" />
-      </svg>
-      <div className="flex-1 h-px bg-border" />
-    </div>
   )
 }
 
 export function OutputScreen({ name, onSave, onDone, onBack }: OutputScreenProps) {
   return (
-    <div className="flex min-h-screen flex-col bg-background pb-24">
+    <div className="flex min-h-screen flex-col bg-background pb-20">
       {/* Header */}
-      <header className="flex items-center gap-3 px-6 pt-6 pb-2">
+      <header className="flex items-center px-6 pt-8 pb-6">
         <button
           onClick={onBack}
-          className="text-muted-foreground transition-colors hover:text-primary"
+          className="text-muted-foreground transition-colors hover:text-foreground"
           aria-label="Go back"
         >
-          <ArrowLeft className="h-5 w-5" strokeWidth={1.5} />
+          <ArrowLeft className="h-4 w-4" strokeWidth={1.5} />
         </button>
       </header>
 
-      <main className="flex-1 px-6 pt-2">
-        {/* Name Header Card */}
-        <div className="rounded-2xl border border-primary/20 bg-secondary px-6 py-8 relative overflow-hidden">
-          {/* Decorative corners */}
-          <div className="absolute top-3 left-3 w-4 h-4 border-t-2 border-l-2 border-primary/30 rounded-tl" />
-          <div className="absolute top-3 right-3 w-4 h-4 border-t-2 border-r-2 border-primary/30 rounded-tr" />
-          <div className="absolute bottom-3 left-3 w-4 h-4 border-b-2 border-l-2 border-primary/30 rounded-bl" />
-          <div className="absolute bottom-3 right-3 w-4 h-4 border-b-2 border-r-2 border-primary/30 rounded-br" />
-
+      <main className="flex-1 px-6">
+        {/* Name header block */}
+        <div className="mb-2">
           <p
-            className="text-center text-5xl leading-tight text-foreground"
+            className="text-6xl leading-none text-foreground"
             dir="rtl"
             lang="ar"
             style={{ fontFamily: "'Amiri', serif" }}
           >
             {name.arabic}
           </p>
-          <p className="mt-3 text-center text-sm tracking-wide text-primary"
-             style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}
-          >
-            {name.transliteration}
-          </p>
-          <p className="mt-1 text-center text-base font-medium text-foreground">
-            {name.meaning}
-          </p>
-
-          {/* Scholar Badge */}
-          <div className="mt-5 flex items-center justify-center">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-background/50 px-3 py-1 text-[10px] font-medium text-primary">
-              <ShieldCheck className="h-3 w-3" />
-              {"Reviewed"} &middot; {name.scholar}
+          <div className="mt-3 flex items-baseline gap-3">
+            <p className="text-sm font-medium text-gold tracking-wide">
+              {name.transliteration}
+            </p>
+            <span className="text-muted-foreground/30">|</span>
+            <p className="text-sm text-muted-foreground">
+              {name.meaning}
+            </p>
+          </div>
+          <div className="mt-3 flex items-center gap-1.5">
+            <ShieldCheck className="h-3 w-3 text-muted-foreground" />
+            <span className="text-[10px] text-muted-foreground tracking-wide">
+              {name.scholar}
             </span>
           </div>
         </div>
 
+        <div className="h-px bg-rule mt-6" />
+
         {/* Four Pillars */}
-        <div className="mt-6 rounded-2xl border border-border bg-card p-6">
-          <PillarSection
-            label="What this Name affirms"
-            content={name.creed}
-          />
-          <PillarDivider />
-          <PillarSection
-            label="What this corrects in you"
-            content={name.correction}
-          />
-          <PillarDivider />
-          <PillarSection
-            label="How this changes how you treat others"
-            content={name.relationship}
-          />
-          <PillarDivider />
-          <PillarSection
-            label="How this changes how you act today"
-            content={name.conduct}
-          />
-        </div>
+        <Section label="What this Name affirms">
+          <p>{name.creed}</p>
+        </Section>
 
-        {/* Dhikr, Du'a, Action */}
-        <div className="mt-4 rounded-2xl border border-border bg-card p-6">
-          {/* Dhikr */}
-          <section className="py-4">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
-              Dhikr
-            </p>
-            <p
-              className="mt-3 text-center text-3xl text-foreground"
-              dir="rtl"
-              lang="ar"
-              style={{ fontFamily: "'Amiri', serif" }}
-            >
-              {name.dhikr}
-            </p>
-            <p className="mt-1 text-center text-xs text-muted-foreground"
-               style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}
-            >
-              {name.dhikrTransliteration}
-            </p>
-          </section>
+        <Section label="What this corrects in you">
+          <p>{name.correction}</p>
+        </Section>
 
-          <PillarDivider />
+        <Section label="How this changes how you treat others">
+          <p>{name.relationship}</p>
+        </Section>
 
-          {/* Du'a */}
-          <section className="py-4">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
-              {"Du'a"}
-            </p>
-            <p className="mt-2.5 text-sm leading-relaxed text-foreground">
-              {name.dua}
-            </p>
-          </section>
+        <Section label="How this changes how you act today">
+          <p>{name.conduct}</p>
+        </Section>
 
-          <PillarDivider />
-
-          {/* Action */}
-          <section className="py-4">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
-              One Action
-            </p>
-            <p className="mt-2.5 text-sm leading-relaxed text-foreground">
-              {name.action}
-            </p>
-          </section>
-        </div>
-
-        {/* Bottom Actions */}
-        <div className="mt-8 flex flex-col gap-3 pb-4">
-          <Button
-            onClick={onSave}
-            className="w-full rounded-xl bg-primary py-6 text-base font-semibold text-primary-foreground tracking-wide transition-all hover:bg-gold-dark active:scale-[0.98]"
+        {/* Dhikr */}
+        <section className="py-6 border-b border-rule">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-muted-foreground mb-4">
+            Dhikr
+          </p>
+          <p
+            className="text-3xl text-foreground"
+            dir="rtl"
+            lang="ar"
+            style={{ fontFamily: "'Amiri', serif" }}
           >
-            Save this session
-          </Button>
-          <Button
+            {name.dhikr}
+          </p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            {name.dhikrTransliteration}
+          </p>
+        </section>
+
+        {/* Du'a */}
+        <Section label="Du'a">
+          <p>{name.dua}</p>
+        </Section>
+
+        {/* Action */}
+        <Section label="One action">
+          <p>{name.action}</p>
+        </Section>
+
+        {/* Bottom actions */}
+        <div className="flex items-center justify-between py-8">
+          <button
             onClick={onDone}
-            variant="ghost"
-            className="w-full rounded-xl py-6 text-base font-medium text-muted-foreground transition-all hover:text-primary hover:bg-transparent"
+            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
-            {"I'm done for now"}
-          </Button>
+            Done
+          </button>
+          <button
+            onClick={onSave}
+            className="group flex items-center gap-2 text-gold text-sm font-medium tracking-wide transition-colors hover:text-foreground"
+          >
+            <span>Save session</span>
+            <svg
+              className="h-4 w-4 transition-transform group-hover:translate-x-1"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            >
+              <path d="M3 8h10M9 4l4 4-4 4" />
+            </svg>
+          </button>
         </div>
       </main>
     </div>

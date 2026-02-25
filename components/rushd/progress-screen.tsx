@@ -23,12 +23,6 @@ function getCalendarDays(): { date: string; label: string }[] {
   return days
 }
 
-const allNamesGrid = namesOfAllah.map((n) => ({
-  id: n.id,
-  letter: n.arabic.slice(0, 3),
-  transliteration: n.transliteration,
-}))
-
 export function ProgressScreen({
   streak,
   calendarDots,
@@ -37,125 +31,82 @@ export function ProgressScreen({
   const days = useMemo(() => getCalendarDays(), [])
 
   return (
-    <div className="flex min-h-screen flex-col bg-background pb-20">
-      {/* Header */}
-      <header className="px-6 pt-6 pb-2">
-        <h1 className="text-2xl font-semibold tracking-tight text-foreground"
-            style={{ fontFamily: "'Playfair Display', serif" }}
-        >
-          Your Journey
-        </h1>
-      </header>
-
-      <main className="flex-1 px-6 pt-4">
-        {/* Streak Card */}
-        <div className="rounded-2xl border border-border bg-card p-6 relative overflow-hidden">
-          {/* Gold accent line at top */}
-          <div className="absolute top-0 left-6 right-6 h-px bg-primary/30" />
-          <div className="flex items-baseline gap-2">
-            <span className="text-4xl font-bold tabular-nums text-primary"
-                  style={{ fontFamily: "'Playfair Display', serif" }}
-            >
-              {streak}
-            </span>
-            <span className="text-sm text-muted-foreground">
-              {streak === 1 ? "day" : "days"}
-            </span>
-          </div>
-          <p className="mt-1 text-xs text-muted-foreground">Current streak</p>
+    <div className="flex min-h-screen flex-col bg-background pb-16">
+      <main className="flex-1 px-6 pt-12">
+        {/* Streak */}
+        <div className="mb-2">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-muted-foreground">
+            Current streak
+          </p>
+        </div>
+        <div className="flex items-baseline gap-2 mb-8">
+          <span className="text-5xl font-bold tabular-nums text-foreground">
+            {streak}
+          </span>
+          <span className="text-sm text-muted-foreground">
+            {streak === 1 ? "day" : "days"}
+          </span>
         </div>
 
-        {/* Consistency - Calendar Dot Grid */}
-        <section className="mt-6">
-          <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
-            Consistency
-          </h3>
-          <div className="mt-3 grid grid-cols-7 gap-2" role="group" aria-label="Check-in calendar">
-            {days.map((day) => {
-              const checkedIn = calendarDots[day.date]
-              return (
-                <div key={day.date} className="flex flex-col items-center gap-1">
-                  <span className="text-[10px] text-muted-foreground/60">
-                    {day.label}
-                  </span>
-                  <div
-                    className={`h-3.5 w-3.5 rounded-full transition-colors ${
-                      checkedIn
-                        ? "bg-primary"
-                        : "border border-border bg-transparent"
-                    }`}
-                    aria-label={`${day.date}: ${checkedIn ? "Checked in" : "Missed"}`}
-                  />
-                </div>
-              )
-            })}
-          </div>
-        </section>
+        <div className="h-px bg-rule mb-8" />
 
-        {/* Mastery - Names Grid */}
-        <section className="mt-8">
-          <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
-            Mastery
-          </h3>
-          <div className="mt-3 grid grid-cols-7 gap-2" role="group" aria-label="Names mastery grid">
-            {allNamesGrid.map((name) => {
-              const engaged = engagedNames.has(name.id)
-              return (
+        {/* Consistency */}
+        <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-muted-foreground mb-4">
+          Last 28 days
+        </p>
+        <div className="grid grid-cols-7 gap-x-3 gap-y-2 mb-8" role="group" aria-label="Check-in calendar">
+          {days.map((day) => {
+            const checkedIn = calendarDots[day.date]
+            return (
+              <div key={day.date} className="flex flex-col items-center gap-1.5">
+                <span className="text-[9px] text-muted-foreground/40 tabular-nums">
+                  {day.label}
+                </span>
                 <div
-                  key={name.id}
-                  className="relative flex items-center justify-center"
-                  title={name.transliteration}
-                >
-                  <svg className="h-10 w-10" viewBox="0 0 40 40">
-                    <circle
-                      cx="20"
-                      cy="20"
-                      r="17"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      className="text-border"
-                    />
-                    {engaged && (
-                      <circle
-                        cx="20"
-                        cy="20"
-                        r="17"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2.5"
-                        strokeDasharray={`${2 * Math.PI * 17}`}
-                        strokeDashoffset={`${2 * Math.PI * 17 * 0.25}`}
-                        strokeLinecap="round"
-                        className="text-primary"
-                        transform="rotate(-90 20 20)"
-                      />
-                    )}
-                  </svg>
-                  <span
-                    className={`absolute text-[10px] font-medium ${
-                      engaged ? "text-primary" : "text-muted-foreground"
-                    }`}
-                    dir="rtl"
-                    lang="ar"
-                  >
-                    {name.letter}
-                  </span>
-                </div>
-              )
-            })}
-          </div>
-        </section>
+                  className={`h-2 w-2 transition-colors ${
+                    checkedIn
+                      ? "bg-gold"
+                      : "bg-rule"
+                  }`}
+                  aria-label={`${day.date}: ${checkedIn ? "Checked in" : "Missed"}`}
+                />
+              </div>
+            )
+          })}
+        </div>
 
-        {/* Bottom Message */}
-        <p className="mt-8 pb-4 text-center text-sm text-muted-foreground"
-           style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}
-        >
-          {"You've engaged with "}
-          <span className="font-medium text-primary">{engagedNames.size}</span>
-          {" Name"}
-          {engagedNames.size !== 1 ? "s" : ""}
-          {". Keep returning."}
+        <div className="h-px bg-rule mb-8" />
+
+        {/* Mastery */}
+        <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-muted-foreground mb-4">
+          Names engaged
+        </p>
+        <div className="flex items-baseline gap-2 mb-6">
+          <span className="text-3xl font-bold tabular-nums text-foreground">
+            {engagedNames.size}
+          </span>
+          <span className="text-sm text-muted-foreground">of 99</span>
+        </div>
+
+        {/* Names grid -- minimal squares */}
+        <div className="grid grid-cols-11 gap-1" role="group" aria-label="Names mastery grid">
+          {namesOfAllah.map((name) => {
+            const engaged = engagedNames.has(name.id)
+            return (
+              <div
+                key={name.id}
+                className={`aspect-square transition-colors ${
+                  engaged ? "bg-gold" : "bg-rule"
+                }`}
+                title={name.transliteration}
+                aria-label={`${name.transliteration}: ${engaged ? "Engaged" : "Not yet"}`}
+              />
+            )
+          })}
+        </div>
+
+        <p className="mt-8 pb-4 text-xs text-muted-foreground">
+          Keep returning.
         </p>
       </main>
     </div>

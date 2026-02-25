@@ -139,16 +139,16 @@ export const namesOfAllah: NameOfAllah[] = [
 ]
 
 export const emotionalStates = [
-  { id: "overwhelmed", label: "I feel overwhelmed" },
-  { id: "worrying", label: "I can't stop worrying" },
-  { id: "angry", label: "I feel angry" },
-  { id: "distant from Allah", label: "I feel distant from Allah" },
-  { id: "numb", label: "I feel numb" },
-  { id: "alone", label: "I feel alone" },
-  { id: "guilty", label: "I feel guilty" },
-  { id: "exhausted", label: "I'm exhausted" },
-  { id: "hopeless", label: "I feel hopeless" },
-  { id: "stuck", label: "I feel stuck" },
+  { id: "overwhelmed", label: "Overwhelmed" },
+  { id: "worrying", label: "Anxious" },
+  { id: "angry", label: "Angry" },
+  { id: "distant from Allah", label: "Distant from Allah" },
+  { id: "numb", label: "Numb" },
+  { id: "alone", label: "Alone" },
+  { id: "guilty", label: "Guilty" },
+  { id: "exhausted", label: "Exhausted" },
+  { id: "hopeless", label: "Hopeless" },
+  { id: "stuck", label: "Stuck" },
 ]
 
 export function findNameForStates(selectedStates: string[]): NameOfAllah {

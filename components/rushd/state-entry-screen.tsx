@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import { ArrowLeft } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { emotionalStates, detectCrisis } from "@/lib/names-data"
 
 interface StateEntryScreenProps {
@@ -37,69 +36,87 @@ export function StateEntryScreen({
   const canProceed = selectedStates.length > 0
 
   return (
-    <div className="flex min-h-screen flex-col bg-background pb-20">
+    <div className="flex min-h-screen flex-col bg-background pb-16">
       {/* Header */}
-      <header className="flex items-center gap-3 px-6 pt-6 pb-2">
+      <header className="flex items-center px-6 pt-8 pb-6">
         <button
           onClick={onBack}
-          className="text-muted-foreground transition-colors hover:text-primary"
+          className="text-muted-foreground transition-colors hover:text-foreground"
           aria-label="Go back"
         >
-          <ArrowLeft className="h-5 w-5" strokeWidth={1.5} />
+          <ArrowLeft className="h-4 w-4" strokeWidth={1.5} />
         </button>
       </header>
 
-      <main className="flex-1 px-6 pt-4">
+      <main className="flex-1 px-6">
         {/* Title */}
-        <h2 className="text-2xl font-semibold tracking-tight text-foreground"
-            style={{ fontFamily: "'Playfair Display', serif" }}
-        >
-          {"What's pulling at you right now?"}
+        <h2 className="text-2xl font-medium tracking-tight text-foreground mb-8">
+          {"What's pulling at you?"}
         </h2>
-        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-          {"Select what resonates. There's no wrong answer."}
-        </p>
 
-        {/* State Cards Grid */}
-        <div className="mt-8 grid grid-cols-2 gap-3" role="group" aria-label="Emotional states">
-          {emotionalStates.map((state) => {
+        {/* Vertical state list */}
+        <div role="group" aria-label="Emotional states">
+          {emotionalStates.map((state, i) => {
             const isSelected = selectedStates.includes(state.id)
             return (
               <button
                 key={state.id}
                 onClick={() => onToggleState(state.id)}
-                className={`rounded-xl px-4 py-4 text-left text-sm font-medium transition-all ${
-                  isSelected
-                    ? "border-2 border-primary bg-primary/10 text-primary"
-                    : "border border-border bg-card text-foreground hover:border-primary/30"
+                className={`group flex w-full items-center text-left transition-all ${
+                  i < emotionalStates.length - 1 ? "border-b border-rule" : ""
                 }`}
                 aria-pressed={isSelected}
               >
-                {state.label}
+                <div
+                  className={`w-0.5 self-stretch transition-colors ${
+                    isSelected ? "bg-gold" : "bg-transparent"
+                  }`}
+                />
+                <span
+                  className={`flex-1 py-4 pl-4 text-base font-medium transition-colors ${
+                    isSelected
+                      ? "text-foreground"
+                      : "text-muted-foreground group-hover:text-foreground/70"
+                  }`}
+                >
+                  {state.label}
+                </span>
               </button>
             )
           })}
         </div>
 
-        {/* Free Text */}
-        <div className="mt-6">
-          <textarea
+        {/* Free text -- single line, minimal */}
+        <div className="mt-8">
+          <input
+            type="text"
             value={localFreeText}
             onChange={(e) => handleFreeTextChange(e.target.value)}
-            placeholder="Or describe it in your own words..."
-            className="w-full resize-none rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/30"
-            rows={3}
+            placeholder="Or say it directly..."
+            className="w-full border-b border-rule bg-transparent py-3 text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-gold focus:outline-none"
           />
         </div>
 
-        {/* CTA */}
-        <Button
-          onClick={onFindName}
-          disabled={!canProceed}
-          className="mt-8 w-full rounded-xl bg-primary py-6 text-base font-semibold text-primary-foreground tracking-wide transition-all hover:bg-gold-dark active:scale-[0.98] disabled:opacity-30"
-        >
-          Find my Name
-        </Button>
+        {/* CTA -- right-aligned text link with arrow */}
+        <div className="mt-10 flex justify-end">
+          {canProceed && (
+            <button
+              onClick={onFindName}
+              className="group flex items-center gap-2 text-gold text-sm font-medium tracking-wide transition-colors hover:text-foreground"
+            >
+              <span>Find the Name</span>
+              <svg
+                className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              >
+                <path d="M3 8h10M9 4l4 4-4 4" />
+              </svg>
+            </button>
+          )}
+        </div>
       </main>
     </div>
   )
