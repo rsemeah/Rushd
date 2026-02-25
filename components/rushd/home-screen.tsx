@@ -88,6 +88,11 @@ export function HomeScreen({ dailyName, onNavigate }: HomeScreenProps) {
           onClick={() => onNavigate("study", dailyName)}
         />
         <EntryCard
+          label="Calibrate"
+          description="Route to the right Name"
+          onClick={() => onNavigate("calibrate")}
+        />
+        <EntryCard
           label="Check in"
           description="Struggling in a moment"
           onClick={() => onNavigate("check-in")}

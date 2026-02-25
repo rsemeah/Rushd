@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useMemo } from "react"
 import type { Screen } from "@/lib/app-state"
-import { getDailyName, findNameForStates } from "@/lib/names-data"
+import { getDailyName, findNameForStates, namesOfAllah } from "@/lib/names-data"
 import type { NameOfAllah } from "@/lib/names-data"
 import { BottomNav } from "./bottom-nav"
 import { HomeScreen } from "./home-screen"
@@ -11,6 +11,7 @@ import { StateEntryScreen } from "./state-entry-screen"
 import { OutputScreen } from "./output-screen"
 import { ProgressScreen } from "./progress-screen"
 import { NamesIndexScreen } from "./names-index-screen"
+import { CalibrateScreen } from "./calibrate-screen"
 import { CrisisScreen } from "./crisis-screen"
 
 interface Reflection {
@@ -97,6 +98,17 @@ export function RushdApp() {
     setScreen("study")
   }, [])
 
+  // Calibrate "Go deeper" -- find the matching name from our data by transliteration
+  const handleCalibrateGoDeeper = useCallback((transliteration: string) => {
+    const match = namesOfAllah.find(
+      (n) => n.transliteration.toLowerCase() === transliteration.toLowerCase()
+    )
+    if (match) {
+      setCurrentName(match)
+      setScreen("study")
+    }
+  }, [])
+
   return (
     <div className="relative mx-auto min-h-screen max-w-md" style={{ backgroundColor: "#0B1120" }}>
       {screen === "home" && (
@@ -129,6 +141,13 @@ export function RushdApp() {
           onDone={handleDone}
           onBack={() => setScreen("check-in")}
           onGoDeeper={handleGoDeeper}
+        />
+      )}
+
+      {screen === "calibrate" && (
+        <CalibrateScreen
+          onCrisis={handleCrisis}
+          onGoDeeper={handleCalibrateGoDeeper}
         />
       )}
 

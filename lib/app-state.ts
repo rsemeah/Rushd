@@ -5,6 +5,8 @@ export type Screen =
   | "study"
   | "check-in"
   | "check-in-output"
+  | "calibrate"
+  | "calibrate-output"
   | "journey"
   | "names-index"
   | "crisis"
