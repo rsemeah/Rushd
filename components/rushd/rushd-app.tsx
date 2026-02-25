@@ -6,10 +6,18 @@ import { getDailyName, findNameForStates } from "@/lib/names-data"
 import type { NameOfAllah } from "@/lib/names-data"
 import { BottomNav } from "./bottom-nav"
 import { HomeScreen } from "./home-screen"
+import { StudyScreen } from "./study-screen"
 import { StateEntryScreen } from "./state-entry-screen"
 import { OutputScreen } from "./output-screen"
 import { ProgressScreen } from "./progress-screen"
+import { NamesIndexScreen } from "./names-index-screen"
 import { CrisisScreen } from "./crisis-screen"
+
+interface Reflection {
+  nameId: number
+  text: string
+  date: string
+}
 
 export function RushdApp() {
   const [screen, setScreen] = useState<Screen>("home")
@@ -19,18 +27,18 @@ export function RushdApp() {
   const [engagedNames, setEngagedNames] = useState<Set<number>>(new Set())
   const [streak, setStreak] = useState(0)
   const [calendarDots, setCalendarDots] = useState<Record<string, boolean>>({})
+  const [reflections, setReflections] = useState<Reflection[]>([])
+  const [prevScreen, setPrevScreen] = useState<Screen>("home")
 
   const dailyName = useMemo(() => getDailyName(), [])
 
-  const handleNavigate = useCallback((s: Screen) => {
+  const handleNavigate = useCallback((s: Screen, nameOverride?: NameOfAllah) => {
+    if (nameOverride) {
+      setCurrentName(nameOverride)
+    }
+    setPrevScreen(screen)
     setScreen(s)
-  }, [])
-
-  const handleCheckIn = useCallback(() => {
-    setSelectedStates([])
-    setFreeText("")
-    setScreen("state-entry")
-  }, [])
+  }, [screen])
 
   const handleToggleState = useCallback((stateId: string) => {
     setSelectedStates((prev) =>
@@ -43,7 +51,7 @@ export function RushdApp() {
   const handleFindName = useCallback(() => {
     const matched = findNameForStates(selectedStates)
     setCurrentName(matched)
-    setScreen("output")
+    setScreen("check-in-output")
   }, [selectedStates])
 
   const handleSaveSession = useCallback(() => {
@@ -52,6 +60,10 @@ export function RushdApp() {
       setEngagedNames((prev) => new Set(prev).add(currentName.id))
       setCalendarDots((prev) => ({ ...prev, [today]: true }))
       setStreak((prev) => prev + 1)
+      setReflections((prev) => [
+        { nameId: currentName.id, text: currentName.action, date: today },
+        ...prev,
+      ])
     }
     setScreen("home")
     setSelectedStates([])
@@ -71,16 +83,34 @@ export function RushdApp() {
   }, [])
 
   const handleCrisisContinue = useCallback(() => {
-    setScreen("state-entry")
+    setScreen("check-in")
+  }, [])
+
+  const handleGoDeeper = useCallback(() => {
+    if (currentName) {
+      setScreen("study")
+    }
+  }, [currentName])
+
+  const handleSelectNameFromIndex = useCallback((name: NameOfAllah) => {
+    setCurrentName(name)
+    setScreen("study")
   }, [])
 
   return (
-    <div className="relative mx-auto min-h-screen max-w-md bg-background">
+    <div className="relative mx-auto min-h-screen max-w-md" style={{ backgroundColor: "#0B1120" }}>
       {screen === "home" && (
-        <HomeScreen dailyName={dailyName} onCheckIn={handleCheckIn} />
+        <HomeScreen dailyName={dailyName} onNavigate={handleNavigate} />
       )}
 
-      {screen === "state-entry" && (
+      {screen === "study" && currentName && (
+        <StudyScreen
+          name={currentName}
+          onBack={() => setScreen(prevScreen)}
+        />
+      )}
+
+      {screen === "check-in" && (
         <StateEntryScreen
           selectedStates={selectedStates}
           onToggleState={handleToggleState}
@@ -92,20 +122,29 @@ export function RushdApp() {
         />
       )}
 
-      {screen === "output" && currentName && (
+      {screen === "check-in-output" && currentName && (
         <OutputScreen
           name={currentName}
           onSave={handleSaveSession}
           onDone={handleDone}
-          onBack={() => setScreen("state-entry")}
+          onBack={() => setScreen("check-in")}
+          onGoDeeper={handleGoDeeper}
         />
       )}
 
-      {screen === "progress" && (
+      {screen === "journey" && (
         <ProgressScreen
           streak={streak}
           calendarDots={calendarDots}
           engagedNames={engagedNames}
+          recentReflections={reflections}
+        />
+      )}
+
+      {screen === "names-index" && (
+        <NamesIndexScreen
+          engagedNames={engagedNames}
+          onSelectName={handleSelectNameFromIndex}
         />
       )}
 
@@ -113,7 +152,6 @@ export function RushdApp() {
         <CrisisScreen onContinue={handleCrisisContinue} />
       )}
 
-      {/* Bottom nav — hidden on crisis screen */}
       {screen !== "crisis" && (
         <BottomNav currentScreen={screen} onNavigate={handleNavigate} />
       )}

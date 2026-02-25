@@ -8,130 +8,167 @@ interface OutputScreenProps {
   onSave: () => void
   onDone: () => void
   onBack: () => void
+  onGoDeeper: () => void
 }
 
-function Section({ label, children }: { label: string; children: React.ReactNode }) {
+function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <section className="py-6 border-b border-rule">
-      <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-muted-foreground mb-3">
-        {label}
-      </p>
-      <div className="text-sm leading-relaxed text-foreground/90">{children}</div>
-    </section>
+    <p
+      className="text-[10px] font-semibold tracking-[0.3em] uppercase mb-3"
+      style={{ color: "#8A9AB5" }}
+    >
+      {children}
+    </p>
   )
 }
 
-export function OutputScreen({ name, onSave, onDone, onBack }: OutputScreenProps) {
+function Divider() {
+  return <div className="h-px my-6" style={{ backgroundColor: "#1E2A3A" }} />
+}
+
+export function OutputScreen({ name, onSave, onDone, onBack, onGoDeeper }: OutputScreenProps) {
   return (
     <div className="flex min-h-screen flex-col bg-background pb-20">
       {/* Header */}
-      <header className="flex items-center px-6 pt-8 pb-6">
+      <header className="flex items-center px-5 pt-6 pb-4">
         <button
           onClick={onBack}
-          className="text-muted-foreground transition-colors hover:text-foreground"
+          style={{ color: "#8A9AB5" }}
           aria-label="Go back"
         >
           <ArrowLeft className="h-4 w-4" strokeWidth={1.5} />
         </button>
       </header>
 
-      <main className="flex-1 px-6">
-        {/* Name header block */}
-        <div className="mb-2">
+      <main className="flex-1 px-5">
+        {/* Name header -- same layout as Study */}
+        <div className="flex items-start justify-between gap-4 pb-4">
+          <div className="flex-1">
+            <p
+              className="text-sm font-medium tracking-wide"
+              style={{ color: "#C1A67B" }}
+            >
+              {name.transliteration}
+            </p>
+            <p className="mt-0.5 text-sm" style={{ color: "#F5F0E8" }}>
+              {name.meaning}
+            </p>
+            <div className="mt-2 flex items-center gap-1.5">
+              <ShieldCheck className="h-3 w-3" style={{ color: "#2D4A3E" }} />
+              <span
+                className="text-[10px] tracking-wide px-2 py-0.5"
+                style={{ color: "#2D4A3E", backgroundColor: "rgba(45,74,62,0.15)" }}
+              >
+                {name.scholar}
+              </span>
+            </div>
+          </div>
           <p
-            className="text-6xl leading-none text-foreground"
+            className="leading-none"
             dir="rtl"
             lang="ar"
-            style={{ fontFamily: "'Amiri', serif" }}
+            style={{
+              fontFamily: "'Amiri', serif",
+              fontSize: "52px",
+              color: "#F5F0E8",
+            }}
           >
             {name.arabic}
           </p>
-          <div className="mt-3 flex items-baseline gap-3">
-            <p className="text-sm font-medium text-gold tracking-wide">
-              {name.transliteration}
-            </p>
-            <span className="text-muted-foreground/30">|</span>
-            <p className="text-sm text-muted-foreground">
-              {name.meaning}
-            </p>
-          </div>
-          <div className="mt-3 flex items-center gap-1.5">
-            <ShieldCheck className="h-3 w-3 text-muted-foreground" />
-            <span className="text-[10px] text-muted-foreground tracking-wide">
-              {name.scholar}
-            </span>
+        </div>
+
+        <div className="h-px" style={{ backgroundColor: "#1E2A3A" }} />
+
+        {/* KNOW -- condensed single paragraph */}
+        <div className="py-6">
+          <SectionLabel>Know</SectionLabel>
+          <p className="text-sm leading-relaxed" style={{ color: "#F5F0E8", opacity: 0.9 }}>
+            {name.creed}
+          </p>
+        </div>
+
+        <div className="h-px" style={{ backgroundColor: "#1E2A3A" }} />
+
+        {/* FEEL -- condensed */}
+        <div className="py-6">
+          <SectionLabel>Feel</SectionLabel>
+          <p className="text-sm leading-relaxed" style={{ color: "#F5F0E8", opacity: 0.9 }}>
+            {name.feelAnswer}
+          </p>
+        </div>
+
+        <div className="h-px" style={{ backgroundColor: "#1E2A3A" }} />
+
+        {/* LIVE -- condensed */}
+        <div className="py-6">
+          <SectionLabel>Live</SectionLabel>
+          <div className="flex flex-col gap-2">
+            {name.liveStatements.map((stmt, i) => (
+              <div
+                key={i}
+                className="py-2.5 px-4"
+                style={{ borderLeft: "3px solid #C1A67B" }}
+              >
+                <p className="text-sm leading-relaxed" style={{ color: "#F5F0E8" }}>
+                  {stmt}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
 
-        <div className="h-px bg-rule mt-6" />
+        <div className="h-px" style={{ backgroundColor: "#1E2A3A" }} />
 
-        {/* Four Pillars */}
-        <Section label="What this Name affirms">
-          <p>{name.creed}</p>
-        </Section>
-
-        <Section label="What this corrects in you">
-          <p>{name.correction}</p>
-        </Section>
-
-        <Section label="How this changes how you treat others">
-          <p>{name.relationship}</p>
-        </Section>
-
-        <Section label="How this changes how you act today">
-          <p>{name.conduct}</p>
-        </Section>
-
-        {/* Dhikr */}
-        <section className="py-6 border-b border-rule">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-muted-foreground mb-4">
-            Dhikr
-          </p>
+        {/* Dhikr + Du'a */}
+        <div className="py-6">
+          <SectionLabel>Dhikr</SectionLabel>
           <p
-            className="text-3xl text-foreground"
+            className="text-center leading-none"
             dir="rtl"
             lang="ar"
-            style={{ fontFamily: "'Amiri', serif" }}
+            style={{
+              fontFamily: "'Amiri', serif",
+              fontSize: "36px",
+              color: "#C1A67B",
+            }}
           >
             {name.dhikr}
           </p>
-          <p className="mt-1 text-xs text-muted-foreground">
+          <p className="text-center mt-1 text-xs" style={{ color: "#8A9AB5" }}>
             {name.dhikrTransliteration}
           </p>
-        </section>
+          <p className="text-center mt-3 text-sm italic" style={{ color: "#F5F0E8", opacity: 0.8 }}>
+            {name.dua}
+          </p>
+        </div>
 
-        {/* Du'a */}
-        <Section label="Du'a">
-          <p>{name.dua}</p>
-        </Section>
+        <div className="h-px" style={{ backgroundColor: "#1E2A3A" }} />
 
-        {/* Action */}
-        <Section label="One action">
-          <p>{name.action}</p>
-        </Section>
+        {/* One action */}
+        <div className="py-6">
+          <SectionLabel>One action</SectionLabel>
+          <p className="text-sm leading-relaxed font-semibold" style={{ color: "#F5F0E8" }}>
+            {name.action}
+          </p>
+        </div>
+
+        <div className="h-px" style={{ backgroundColor: "#1E2A3A" }} />
 
         {/* Bottom actions */}
-        <div className="flex items-center justify-between py-8">
+        <div className="flex items-center justify-between py-6">
           <button
-            onClick={onDone}
-            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+            onClick={onGoDeeper}
+            className="text-sm font-medium tracking-wide transition-colors"
+            style={{ color: "#C1A67B" }}
           >
-            Done
+            {"Go deeper \u2192"}
           </button>
           <button
             onClick={onSave}
-            className="group flex items-center gap-2 text-gold text-sm font-medium tracking-wide transition-colors hover:text-foreground"
+            className="text-sm font-medium tracking-wide transition-colors"
+            style={{ color: "#C1A67B" }}
           >
-            <span>Save session</span>
-            <svg
-              className="h-4 w-4 transition-transform group-hover:translate-x-1"
-              viewBox="0 0 16 16"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-            >
-              <path d="M3 8h10M9 4l4 4-4 4" />
-            </svg>
+            {"Save session \u2192"}
           </button>
         </div>
       </main>

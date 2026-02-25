@@ -6,42 +6,49 @@ interface CrisisScreenProps {
 
 export function CrisisScreen({ onContinue }: CrisisScreenProps) {
   return (
-    <div className="flex min-h-screen flex-col justify-center bg-background px-6">
-      <div className="max-w-sm">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-gold mb-6">
-          Pause
-        </p>
-
-        <h2 className="text-2xl font-medium tracking-tight text-foreground mb-4">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background px-6">
+      <div className="max-w-sm text-center">
+        {/* Main message */}
+        <h2
+          className="text-[28px] font-semibold tracking-tight mb-4"
+          style={{ color: "#F5F0E8" }}
+        >
           We see you.
         </h2>
 
-        <p className="text-sm leading-relaxed text-muted-foreground mb-12">
-          {"What you're feeling right now matters. You don't have to carry this alone."}
+        <p
+          className="text-base leading-relaxed mb-10"
+          style={{ color: "#8A9AB5" }}
+        >
+          {"What you\u2019re feeling matters. You don\u2019t have to carry this alone."}
         </p>
 
-        <div className="h-px bg-rule mb-8" />
-
+        {/* Gold filled CTA */}
         <a
           href="tel:988"
-          className="group flex items-center gap-2 text-gold text-sm font-medium tracking-wide transition-colors hover:text-foreground mb-8"
+          className="inline-block w-full py-4 text-sm font-semibold tracking-wide text-center transition-colors"
+          style={{
+            backgroundColor: "#C1A67B",
+            color: "#0B1120",
+          }}
           aria-label="Call crisis hotline"
         >
-          <span>Talk to someone now</span>
-          <svg
-            className="h-4 w-4 transition-transform group-hover:translate-x-1"
-            viewBox="0 0 16 16"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-          >
-            <path d="M3 8h10M9 4l4 4-4 4" />
-          </svg>
+          Talk to someone now
         </a>
 
+        {/* Crisis line number */}
+        <p className="mt-3 text-sm" style={{ color: "#8A9AB5" }}>
+          988 Suicide and Crisis Lifeline
+        </p>
+
+        {/* Thin rule */}
+        <div className="h-px my-8 w-full" style={{ backgroundColor: "#1E2A3A" }} />
+
+        {/* Continue link -- small, not prominent */}
         <button
           onClick={onContinue}
-          className="text-xs text-muted-foreground transition-colors hover:text-foreground"
+          className="text-xs transition-colors"
+          style={{ color: "#8A9AB5" }}
         >
           Continue to Rushd
         </button>

@@ -1,12 +1,20 @@
 import type { NameOfAllah } from "./names-data"
 
-export type Screen = "home" | "state-entry" | "output" | "progress" | "crisis"
+export type Screen =
+  | "home"
+  | "study"
+  | "check-in"
+  | "check-in-output"
+  | "journey"
+  | "names-index"
+  | "crisis"
 
 export interface Session {
   id: string
   date: string
   nameId: number
   states: string[]
+  reflection?: string
 }
 
 export interface AppState {
