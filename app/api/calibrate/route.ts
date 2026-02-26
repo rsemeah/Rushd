@@ -1,5 +1,4 @@
 import { generateText } from "ai"
-import { createGroq } from "@ai-sdk/groq"
 import { z } from "zod"
 import { namesOfAllah } from "@/lib/names-data"
 
@@ -77,17 +76,6 @@ IMPORTANT: You MUST respond with ONLY a valid JSON object matching this exact sc
 Do NOT include any text before or after the JSON. Return ONLY the JSON object.`
 
 export async function POST(req: Request) {
-  // Check for Groq API key
-  const groqApiKey = process.env.GROQ_API_KEY
-  if (!groqApiKey) {
-    console.error("[v0] GROQ_API_KEY not configured")
-    return Response.json({ error: "AI service not configured." }, { status: 500 })
-  }
-
-  const groq = createGroq({
-    apiKey: groqApiKey,
-  })
-
   let body
   try {
     body = await req.json()
@@ -118,22 +106,18 @@ export async function POST(req: Request) {
           dua: "",
           action: "",
         },
-        message: "Rushd isn\u2019t the right place for that question. A qualified scholar is.",
+        message: "Rushd isn't the right place for that question. A qualified scholar is.",
       },
       { status: 200 }
     )
   }
 
   try {
+    // Using Vercel AI Gateway - no API key needed for supported providers
     const { text } = await generateText({
-      model: groq("llama-3.3-70b-versatile"),
+      model: "openai/gpt-4o-mini",
       system: SYSTEM_PROMPT,
-      messages: [
-        {
-          role: "user",
-          content: input.trim(),
-        },
-      ],
+      prompt: input.trim(),
     })
 
     // Parse the JSON response from the LLM
@@ -147,14 +131,14 @@ export async function POST(req: Request) {
       const parsed = JSON.parse(jsonMatch[0])
       output = calibrationSchema.parse(parsed)
     } catch (parseError) {
-      console.error("[v0] Failed to parse Groq response:", parseError)
+      console.error("[v0] Failed to parse AI response:", parseError)
       console.error("[v0] Raw response:", text)
       return Response.json({ error: "Failed to process response. Try again." }, { status: 500 })
     }
 
     return Response.json({ output })
   } catch (e) {
-    console.error("[v0] Groq calibration error:", e)
+    console.error("[v0] AI calibration error:", e)
     return Response.json({ error: "Connection failed. Try again." }, { status: 500 })
   }
 }
