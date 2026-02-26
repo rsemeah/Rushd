@@ -6,7 +6,16 @@ export async function updateSession(request: NextRequest) {
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
   // If Supabase is not configured, skip auth checks and just continue
-  if (!supabaseUrl || !supabaseAnonKey) {
+  if (!supabaseUrl || !supabaseAnonKey || supabaseUrl === '' || supabaseAnonKey === '') {
+    console.log('[v0] Supabase not configured, skipping auth middleware')
+    return NextResponse.next({ request })
+  }
+
+  // Validate URL format before creating client
+  try {
+    new URL(supabaseUrl)
+  } catch {
+    console.log('[v0] Invalid Supabase URL format:', supabaseUrl)
     return NextResponse.next({ request })
   }
 
