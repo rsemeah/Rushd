@@ -2,26 +2,46 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function updateSession(request: NextRequest) {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  // Debug: Log raw env var values
+  const rawUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const rawKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  
+  console.log('[v0] Raw SUPABASE_URL:', JSON.stringify(rawUrl))
+  console.log('[v0] Raw SUPABASE_URL type:', typeof rawUrl)
+  console.log('[v0] Raw SUPABASE_URL length:', rawUrl?.length)
+  console.log('[v0] Has ANON_KEY:', !!rawKey)
 
-  // If Supabase is not configured, skip auth checks and just continue
-  if (!supabaseUrl || !supabaseAnonKey || supabaseUrl === '' || supabaseAnonKey === '') {
+  // If Supabase is not configured, skip auth checks
+  if (!rawUrl || !rawKey || rawUrl.trim() === '' || rawKey.trim() === '') {
     console.log('[v0] Supabase not configured, skipping auth middleware')
     return NextResponse.next({ request })
   }
 
+  // Trim and validate URL
+  const supabaseUrl = rawUrl.trim()
+  const supabaseAnonKey = rawKey.trim()
+
   // Validate URL format before creating client
+  let validatedUrl: URL
   try {
-    new URL(supabaseUrl)
-  } catch {
-    console.log('[v0] Invalid Supabase URL format:', supabaseUrl)
+    validatedUrl = new URL(supabaseUrl)
+    console.log('[v0] URL validated successfully:', validatedUrl.href)
+  } catch (e) {
+    console.log('[v0] Invalid Supabase URL format:', supabaseUrl, 'Error:', e)
+    return NextResponse.next({ request })
+  }
+
+  // Extra validation: must be https and supabase.co domain
+  if (!validatedUrl.protocol.startsWith('https')) {
+    console.log('[v0] URL is not HTTPS:', validatedUrl.protocol)
     return NextResponse.next({ request })
   }
 
   let supabaseResponse = NextResponse.next({
     request,
   })
+
+  console.log('[v0] Creating Supabase client with URL:', supabaseUrl)
 
   const supabase = createServerClient(
     supabaseUrl,
