@@ -41,25 +41,23 @@ export function ProgressScreen({
   const days = useMemo(() => getCalendarDays(), [])
 
   return (
-    <div className="flex min-h-screen flex-col bg-background pb-20">
-      <main className="flex-1 px-5 pt-6">
+    <div className="flex min-h-screen flex-col bg-background pb-24">
+      <main className="flex-1 px-6 pt-8">
         {/* Header */}
-        <h2
-          className="text-xl font-medium tracking-tight mb-8"
-          style={{ color: "#F5F0E8" }}
-        >
+        <h2 className="text-2xl font-medium tracking-tight mb-8 text-text-primary">
           Your Path Through the Names
         </h2>
 
         {/* THE 99 grid -- 9 columns */}
-        <div className="grid grid-cols-9 gap-[3px]" role="group" aria-label="99 Names progress grid">
+        <div className="grid grid-cols-9 gap-1" role="group" aria-label="99 Names progress grid">
           {allTiles.map((tile) => {
             const engaged = engagedNames.has(tile.id)
             return (
               <div
                 key={tile.id}
-                className="relative aspect-square flex items-center justify-center"
-                style={{ backgroundColor: engaged ? "#162035" : "#1E2A3A" }}
+                className={`relative aspect-square flex items-center justify-center ${
+                  engaged ? "bg-elevated" : "bg-divider"
+                }`}
                 title={tile.transliteration}
                 aria-label={`${tile.transliteration}: ${engaged ? "Engaged" : "Not yet"}`}
               >
@@ -74,7 +72,7 @@ export function ProgressScreen({
                       cy="12"
                       r="10"
                       fill="none"
-                      stroke="#C1A67B"
+                      className="stroke-gold"
                       strokeWidth="1"
                       strokeDasharray="63"
                       strokeDashoffset="0"
@@ -82,15 +80,11 @@ export function ProgressScreen({
                   </svg>
                 )}
                 <span
-                  className="relative z-10"
+                  className={`relative z-10 font-serif text-sm ${
+                    engaged ? "text-arabic" : "text-text-secondary opacity-40"
+                  }`}
                   dir="rtl"
                   lang="ar"
-                  style={{
-                    fontFamily: "'Amiri', serif",
-                    fontSize: "13px",
-                    color: engaged ? "#F5F0E8" : "#8A9AB5",
-                    opacity: engaged ? 1 : 0.4,
-                  }}
                 >
                   {tile.abbr}
                 </span>
@@ -100,36 +94,34 @@ export function ProgressScreen({
         </div>
 
         {/* Counter */}
-        <p className="mt-4 text-[13px]" style={{ color: "#8A9AB5" }}>
+        <p className="mt-4 text-sm text-text-secondary">
           {engagedNames.size} of 99 Names engaged
         </p>
 
         {/* Divider */}
-        <div className="h-px my-6" style={{ backgroundColor: "#1E2A3A" }} />
+        <div className="h-px my-6 bg-divider" />
 
         {/* Streak -- secondary, understated */}
-        <p className="text-sm" style={{ color: "#8A9AB5" }}>
+        <p className="text-base text-text-secondary">
           {streak > 0
             ? `${streak}-day streak`
             : "No active streak"}
         </p>
 
         {/* Calendar dot grid -- 5 weeks, minimal */}
-        <div className="grid grid-cols-7 gap-1.5 mt-4" role="group" aria-label="Check-in calendar">
+        <div className="grid grid-cols-7 gap-2 mt-4" role="group" aria-label="Check-in calendar">
           {days.map((day) => {
             const checkedIn = calendarDots[day.date]
             return (
               <div
                 key={day.date}
-                className="flex h-4 w-4 items-center justify-center"
+                className="flex h-5 w-5 items-center justify-center"
                 aria-label={`${day.date}: ${checkedIn ? "Checked in" : "Missed"}`}
               >
                 <div
-                  className="h-2 w-2"
-                  style={{
-                    backgroundColor: checkedIn ? "#C1A67B" : "#1E2A3A",
-                    borderRadius: "50%",
-                  }}
+                  className={`h-2.5 w-2.5 rounded-full ${
+                    checkedIn ? "bg-gold" : "bg-divider"
+                  }`}
                 />
               </div>
             )
@@ -137,32 +129,29 @@ export function ProgressScreen({
         </div>
 
         {/* Divider */}
-        <div className="h-px my-6" style={{ backgroundColor: "#1E2A3A" }} />
+        <div className="h-px my-6 bg-divider" />
 
         {/* Recent reflections */}
-        <p
-          className="text-[10px] font-semibold tracking-[0.3em] uppercase mb-4"
-          style={{ color: "#8A9AB5" }}
-        >
+        <p className="text-xs font-semibold tracking-[0.3em] uppercase mb-4 text-text-secondary">
           Recent reflections
         </p>
         {recentReflections.length === 0 ? (
-          <p className="text-sm" style={{ color: "#8A9AB5", opacity: 0.5 }}>
+          <p className="text-base text-text-secondary opacity-50">
             No reflections yet. Complete a session to begin.
           </p>
         ) : (
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-4">
             {recentReflections.slice(0, 3).map((ref, i) => {
               const name = namesOfAllah.find((n) => n.id === ref.nameId)
               return (
-                <div key={i} className="py-3" style={{ borderBottom: "1px solid #1E2A3A" }}>
-                  <p className="text-sm font-medium" style={{ color: "#C1A67B" }}>
+                <div key={i} className="py-4 border-b border-divider">
+                  <p className="text-base font-medium text-gold">
                     {name?.transliteration || "Unknown"}
                   </p>
-                  <p className="mt-1 text-sm" style={{ color: "#F5F0E8", opacity: 0.8 }}>
+                  <p className="mt-2 text-base text-text-primary opacity-80">
                     {ref.text}
                   </p>
-                  <p className="mt-1 text-[11px]" style={{ color: "#8A9AB5", opacity: 0.5 }}>
+                  <p className="mt-2 text-sm text-text-secondary opacity-50">
                     {ref.date}
                   </p>
                 </div>

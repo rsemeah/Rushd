@@ -3,37 +3,50 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Light mode - warm, clean aesthetic */
 :root {
-  --background: #0B1120;
-  --foreground: #F5F0E8;
-  --card: #111E32;
-  --card-foreground: #F5F0E8;
-  --popover: #111E32;
-  --popover-foreground: #F5F0E8;
-  --primary: #C1A67B;
-  --primary-foreground: #0B1120;
-  --secondary: #162035;
-  --secondary-foreground: #F5F0E8;
-  --muted: #162035;
-  --muted-foreground: #8A9AB5;
+  --background: #FDFBF7;
+  --foreground: #1A1A1A;
+  --card: #FFFFFF;
+  --card-foreground: #1A1A1A;
+  --popover: #FFFFFF;
+  --popover-foreground: #1A1A1A;
+  --primary: #8B7355;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F5F0E8;
+  --secondary-foreground: #1A1A1A;
+  --muted: #F5F0E8;
+  --muted-foreground: #6B7280;
   --accent: #2D4A3E;
-  --accent-foreground: #F5F0E8;
+  --accent-foreground: #FFFFFF;
   --destructive: #DC2626;
-  --destructive-foreground: #F5F0E8;
-  --border: #1E2A3A;
-  --input: #1E2A3A;
-  --ring: #C1A67B;
+  --destructive-foreground: #FFFFFF;
+  --border: #E5E0D8;
+  --input: #E5E0D8;
+  --ring: #8B7355;
   --radius: 0;
-  --sidebar: #0B1120;
-  --sidebar-foreground: #F5F0E8;
-  --sidebar-primary: #C1A67B;
-  --sidebar-primary-foreground: #0B1120;
-  --sidebar-accent: #111E32;
-  --sidebar-accent-foreground: #F5F0E8;
-  --sidebar-border: #1E2A3A;
-  --sidebar-ring: #C1A67B;
+  --sidebar: #FDFBF7;
+  --sidebar-foreground: #1A1A1A;
+  --sidebar-primary: #8B7355;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #F5F0E8;
+  --sidebar-accent-foreground: #1A1A1A;
+  --sidebar-border: #E5E0D8;
+  --sidebar-ring: #8B7355;
+  
+  /* Rushd-specific tokens */
+  --gold: #8B7355;
+  --gold-light: #A68B6A;
+  --green: #2D4A3E;
+  --surface: #FFFFFF;
+  --elevated: #F5F0E8;
+  --divider: #E5E0D8;
+  --text-primary: #1A1A1A;
+  --text-secondary: #6B7280;
+  --arabic-color: #1A1A1A;
 }
 
+/* Dark mode - deep, contemplative */
 .dark {
   --background: #0B1120;
   --foreground: #F5F0E8;
@@ -62,6 +75,17 @@
   --sidebar-accent-foreground: #F5F0E8;
   --sidebar-border: #1E2A3A;
   --sidebar-ring: #C1A67B;
+  
+  /* Rushd-specific tokens */
+  --gold: #C1A67B;
+  --gold-light: #D4B896;
+  --green: #2D4A3E;
+  --surface: #111E32;
+  --elevated: #162035;
+  --divider: #1E2A3A;
+  --text-primary: #F5F0E8;
+  --text-secondary: #8A9AB5;
+  --arabic-color: #F5F0E8;
 }
 
 @theme inline {
@@ -87,12 +111,15 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-gold: #C1A67B;
-  --color-gold-light: #D4B896;
-  --color-green: #2D4A3E;
-  --color-surface: #111E32;
-  --color-elevated: #162035;
-  --color-divider: #1E2A3A;
+  --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+  --color-green: var(--green);
+  --color-surface: var(--surface);
+  --color-elevated: var(--elevated);
+  --color-divider: var(--divider);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-arabic: var(--arabic-color);
   --radius-sm: 0;
   --radius-md: 0;
   --radius-lg: 0;
