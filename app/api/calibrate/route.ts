@@ -1,11 +1,7 @@
-import { generateText, Output } from "ai"
+import { generateText } from "ai"
 import { createGroq } from "@ai-sdk/groq"
 import { z } from "zod"
 import { namesOfAllah } from "@/lib/names-data"
-
-const groq = createGroq({
-  apiKey: process.env.GROQ_API_KEY,
-})
 
 const calibrationSchema = z.object({
   state_detected: z.array(z.string()),
@@ -60,10 +56,46 @@ Rules:
 Available Names:
 ${JSON.stringify(namesList)}
 
-You MUST select from this list. Do not invent Names.`
+You MUST select from this list. Do not invent Names.
+
+IMPORTANT: You MUST respond with ONLY a valid JSON object matching this exact schema:
+{
+  "state_detected": ["array of detected emotional states"],
+  "primary_name": "the internal name identifier",
+  "arabic": "Arabic text of the Name",
+  "transliteration": "transliteration of the Name",
+  "english": "English meaning",
+  "why": "2-3 sentences explanation",
+  "know": "1 sentence creedal meaning",
+  "feel": "1 sentence on false belief exposed",
+  "live": "1 concrete behavioral instruction",
+  "dua": "short du'a with the Name",
+  "action": "one concrete action for today",
+  "risk_level": "standard" | "crisis" | "scholar_required" | "vague"
+}
+
+Do NOT include any text before or after the JSON. Return ONLY the JSON object.`
 
 export async function POST(req: Request) {
-  const { input } = await req.json()
+  // Check for Groq API key
+  const groqApiKey = process.env.GROQ_API_KEY
+  if (!groqApiKey) {
+    console.error("[v0] GROQ_API_KEY not configured")
+    return Response.json({ error: "AI service not configured." }, { status: 500 })
+  }
+
+  const groq = createGroq({
+    apiKey: groqApiKey,
+  })
+
+  let body
+  try {
+    body = await req.json()
+  } catch {
+    return Response.json({ error: "Invalid request body." }, { status: 400 })
+  }
+
+  const { input } = body
 
   if (!input || typeof input !== "string" || input.trim().length === 0) {
     return Response.json({ error: "Input required." }, { status: 400 })
@@ -93,11 +125,8 @@ export async function POST(req: Request) {
   }
 
   try {
-    const { output } = await generateText({
+    const { text } = await generateText({
       model: groq("llama-3.3-70b-versatile"),
-      output: Output.object({
-        schema: calibrationSchema,
-      }),
       system: SYSTEM_PROMPT,
       messages: [
         {
@@ -106,6 +135,22 @@ export async function POST(req: Request) {
         },
       ],
     })
+
+    // Parse the JSON response from the LLM
+    let output
+    try {
+      // Try to extract JSON from the response (in case there's extra text)
+      const jsonMatch = text.match(/\{[\s\S]*\}/)
+      if (!jsonMatch) {
+        throw new Error("No JSON found in response")
+      }
+      const parsed = JSON.parse(jsonMatch[0])
+      output = calibrationSchema.parse(parsed)
+    } catch (parseError) {
+      console.error("[v0] Failed to parse Groq response:", parseError)
+      console.error("[v0] Raw response:", text)
+      return Response.json({ error: "Failed to process response. Try again." }, { status: 500 })
+    }
 
     return Response.json({ output })
   } catch (e) {
