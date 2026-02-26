@@ -92,9 +92,11 @@ export async function POST(req: Request) {
   }
 
   try {
+    console.log("[v0] Starting AI calibration for input:", input.trim().substring(0, 50))
+    
     // Using Vercel AI Gateway with structured output
-    const { output } = await generateText({
-      model: "openai/gpt-4o-mini",
+    const result = await generateText({
+      model: "openai/gpt-4o-mini" as Parameters<typeof generateText>[0]["model"],
       output: Output.object({
         schema: calibrationSchema,
       }),
@@ -102,14 +104,19 @@ export async function POST(req: Request) {
       prompt: input.trim(),
     })
 
-    if (!output) {
-      console.error("[v0] No output from AI")
+    console.log("[v0] AI result received:", JSON.stringify(result).substring(0, 200))
+
+    if (!result.output) {
+      console.error("[v0] No output from AI, full result:", JSON.stringify(result))
       return Response.json({ error: "Failed to process response. Try again." }, { status: 500 })
     }
 
-    return Response.json({ output })
-  } catch (e) {
-    console.error("[v0] AI calibration error:", e)
+    console.log("[v0] Returning output:", JSON.stringify(result.output).substring(0, 100))
+    return Response.json({ output: result.output })
+  } catch (e: unknown) {
+    const error = e as Error
+    console.error("[v0] AI calibration error:", error.message)
+    console.error("[v0] Error stack:", error.stack)
     return Response.json({ error: "Connection failed. Try again." }, { status: 500 })
   }
 }
