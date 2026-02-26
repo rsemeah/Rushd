@@ -1,7 +1,8 @@
-import { generateText } from "ai"
+import { generateText, Output } from "ai"
 import { z } from "zod"
 import { namesOfAllah } from "@/lib/names-data"
 
+// Using nullable() instead of optional() for OpenAI compatibility with strict mode
 const calibrationSchema = z.object({
   state_detected: z.array(z.string()),
   primary_name: z.string(),
@@ -30,50 +31,28 @@ const namesList = namesOfAllah.map((n) => ({
   dua: n.dua.substring(0, 120),
 }))
 
-const SYSTEM_PROMPT = `You are a constrained routing assistant for Rushd, an Islamic app built on the Names of Allah. You are NOT a chatbot. You are NOT a therapist. You are a routing tool.
+const SYSTEM_PROMPT = `You are a routing assistant for Rushd, an Islamic app built on the 99 Names of Allah. You are NOT a chatbot or therapist - you are a routing tool.
 
-Your only function is to:
-1. Read the user's input
-2. Identify the emotional or situational state
-3. Return a structured JSON object matching them to exactly ONE Name of Allah from the provided list
+Your function:
+1. Read the user's emotional/situational state
+2. Match them to exactly ONE Name of Allah from the list below
+3. Return structured guidance
 
 Rules:
-- Never say "I understand how you feel" or any variation
-- Never use wellness language, therapy-speak, or soft encouragement
-- Be direct, precise, and grounded in Islamic scholarship
+- Be direct, precise, grounded in Islamic scholarship
 - Write in second person ("You are..." not "The user is...")
-- The "why" field: 2-3 sentences connecting the Name to the situation. Zero filler.
-- The "know" field: 1 sentence on the creedal meaning, relevant to the situation
-- The "feel" field: 1 sentence on what false belief this Name exposes
-- The "live" field: 1 concrete behavioral instruction for today. Not a principle, not a platitude.
-- The "action" field: one concrete action for today, specific to their situation
-- The "dua" field: a short du'a incorporating the Name
-- If the situation describes crisis (suicidal ideation, self-harm, wanting to die), set risk_level to "crisis" and leave all other text fields empty
-- If the input requests a fatwa, ruling, or theological opinion, set risk_level to "scholar_required"
-- If the input is too vague to determine an emotional state, set risk_level to "vague"
+- "why": 2-3 sentences connecting the Name to the situation. No filler.
+- "know": 1 sentence on creedal meaning relevant to situation
+- "feel": 1 sentence on false belief this Name exposes
+- "live": 1 concrete behavioral instruction for today
+- "action": one specific action for their situation
+- "dua": a short du'a incorporating the Name
+- If crisis (suicidal ideation, self-harm): set risk_level="crisis", leave text fields empty
+- If fatwa/ruling requested: set risk_level="scholar_required"
+- If too vague: set risk_level="vague"
 
-Available Names:
-${JSON.stringify(namesList)}
-
-You MUST select from this list. Do not invent Names.
-
-IMPORTANT: You MUST respond with ONLY a valid JSON object matching this exact schema:
-{
-  "state_detected": ["array of detected emotional states"],
-  "primary_name": "the internal name identifier",
-  "arabic": "Arabic text of the Name",
-  "transliteration": "transliteration of the Name",
-  "english": "English meaning",
-  "why": "2-3 sentences explanation",
-  "know": "1 sentence creedal meaning",
-  "feel": "1 sentence on false belief exposed",
-  "live": "1 concrete behavioral instruction",
-  "dua": "short du'a with the Name",
-  "action": "one concrete action for today",
-  "risk_level": "standard" | "crisis" | "scholar_required" | "vague"
-}
-
-Do NOT include any text before or after the JSON. Return ONLY the JSON object.`
+Available Names (select from this list only):
+${JSON.stringify(namesList)}`
 
 export async function POST(req: Request) {
   let body
@@ -113,26 +92,18 @@ export async function POST(req: Request) {
   }
 
   try {
-    // Using Vercel AI Gateway - no API key needed for supported providers
-    const { text } = await generateText({
+    // Using Vercel AI Gateway with structured output
+    const { output } = await generateText({
       model: "openai/gpt-4o-mini",
+      output: Output.object({
+        schema: calibrationSchema,
+      }),
       system: SYSTEM_PROMPT,
       prompt: input.trim(),
     })
 
-    // Parse the JSON response from the LLM
-    let output
-    try {
-      // Try to extract JSON from the response (in case there's extra text)
-      const jsonMatch = text.match(/\{[\s\S]*\}/)
-      if (!jsonMatch) {
-        throw new Error("No JSON found in response")
-      }
-      const parsed = JSON.parse(jsonMatch[0])
-      output = calibrationSchema.parse(parsed)
-    } catch (parseError) {
-      console.error("[v0] Failed to parse AI response:", parseError)
-      console.error("[v0] Raw response:", text)
+    if (!output) {
+      console.error("[v0] No output from AI")
       return Response.json({ error: "Failed to process response. Try again." }, { status: 500 })
     }
 
