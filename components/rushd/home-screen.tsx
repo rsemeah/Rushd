@@ -1,9 +1,9 @@
 "use client"
 
-import { User } from "lucide-react"
 import type { NameOfAllah } from "@/lib/names-data"
 import type { Screen } from "@/lib/app-state"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { UserMenu } from "@/components/user-menu"
 
 interface HomeScreenProps {
   dailyName: NameOfAllah
@@ -20,12 +20,7 @@ export function HomeScreen({ dailyName, onNavigate }: HomeScreenProps) {
         </span>
         <div className="flex items-center gap-1">
           <ThemeToggle />
-          <button
-            className="flex h-10 w-10 items-center justify-center text-text-secondary"
-            aria-label="Profile"
-          >
-            <User className="h-5 w-5" strokeWidth={1.5} />
-          </button>
+          <UserMenu />
         </div>
       </header>
 
