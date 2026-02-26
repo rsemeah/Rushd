@@ -1,8 +1,9 @@
 "use client"
 
-import { User } from "lucide-react"
 import type { NameOfAllah } from "@/lib/names-data"
 import type { Screen } from "@/lib/app-state"
+import { ThemeToggle } from "@/components/theme-toggle"
+import { UserMenu } from "@/components/user-menu"
 
 interface HomeScreenProps {
   dailyName: NameOfAllah
@@ -11,77 +12,54 @@ interface HomeScreenProps {
 
 export function HomeScreen({ dailyName, onNavigate }: HomeScreenProps) {
   return (
-    <div className="flex min-h-screen flex-col bg-background pb-20">
+    <div className="flex min-h-screen flex-col bg-background pb-24">
       {/* Top bar */}
-      <header className="flex items-center justify-between px-5 pt-6 pb-2">
-        <span
-          className="text-[11px] font-semibold tracking-[0.3em] uppercase"
-          style={{ color: "#C1A67B" }}
-        >
+      <header className="flex items-center justify-between px-6 pt-8 pb-2">
+        <span className="text-xs font-semibold tracking-[0.3em] uppercase text-gold">
           RUSHD
         </span>
-        <button
-          className="flex h-8 w-8 items-center justify-center"
-          style={{ color: "#8A9AB5" }}
-          aria-label="Profile"
-        >
-          <User className="h-4 w-4" strokeWidth={1.5} />
-        </button>
+        <div className="flex items-center gap-1">
+          <ThemeToggle />
+          <UserMenu />
+        </div>
       </header>
 
       {/* TODAY'S NAME label */}
-      <div className="px-5 pt-6">
-        <p
-          className="text-[11px] font-semibold tracking-[0.3em] uppercase"
-          style={{ color: "#C1A67B" }}
-        >
+      <div className="px-6 pt-8">
+        <p className="text-xs font-semibold tracking-[0.3em] uppercase text-gold">
           {"Today\u2019s Name"}
         </p>
       </div>
 
       {/* The Name block -- hero, 50% of screen */}
-      <div className="flex flex-1 flex-col justify-center px-5">
+      <div className="flex flex-1 flex-col justify-center px-6 py-8">
         {/* Arabic -- dominant */}
         <p
-          className="leading-none"
+          className="font-serif leading-none text-arabic text-7xl sm:text-8xl"
           dir="rtl"
           lang="ar"
-          style={{
-            fontFamily: "'Amiri', serif",
-            fontSize: "72px",
-            color: "#F5F0E8",
-          }}
         >
           {dailyName.arabic}
         </p>
 
         {/* Transliteration */}
-        <p
-          className="mt-3 text-lg font-medium tracking-wide"
-          style={{ color: "#C1A67B" }}
-        >
+        <p className="mt-4 text-xl font-medium tracking-wide text-gold sm:text-2xl">
           {dailyName.transliteration}
         </p>
 
         {/* English meaning */}
-        <p
-          className="mt-1 text-[15px]"
-          style={{ color: "#F5F0E8" }}
-        >
+        <p className="mt-2 text-base text-text-primary sm:text-lg">
           {dailyName.meaning}
         </p>
 
         {/* Reflection -- italic muted */}
-        <p
-          className="mt-3 text-[15px] italic max-w-xs"
-          style={{ color: "#8A9AB5" }}
-        >
+        <p className="mt-4 text-base italic max-w-sm text-text-secondary sm:text-lg">
           {dailyName.reflectionPrompt}
         </p>
       </div>
 
       {/* Three entry door cards */}
-      <div className="px-5 pb-4 flex flex-col gap-3">
+      <div className="px-6 pb-6 flex flex-col gap-4">
         <EntryCard
           label="Study this Name"
           description="Learn who Allah is"
@@ -119,26 +97,19 @@ function EntryCard({
   return (
     <button
       onClick={onClick}
-      className="group flex w-full items-center text-left transition-colors"
-      style={{ backgroundColor: "#111E32", borderLeft: "3px solid #C1A67B" }}
+      className="group flex w-full items-center text-left transition-colors bg-surface border-l-[3px] border-gold"
     >
-      <div className="flex-1 py-4 px-4">
-        <p
-          className="text-[11px] font-semibold tracking-[0.2em] uppercase"
-          style={{ color: "#C1A67B" }}
-        >
+      <div className="flex-1 py-5 px-5">
+        <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold">
           {label}
         </p>
-        <p
-          className="mt-0.5 text-sm"
-          style={{ color: "#F5F0E8" }}
-        >
+        <p className="mt-1 text-base text-text-primary">
           {description}
         </p>
       </div>
-      <div className="pr-4" style={{ color: "#8A9AB5" }}>
+      <div className="pr-5 text-text-secondary">
         <svg
-          className="h-4 w-4 transition-transform group-hover:translate-x-1"
+          className="h-5 w-5 transition-transform group-hover:translate-x-1"
           viewBox="0 0 16 16"
           fill="none"
           stroke="currentColor"

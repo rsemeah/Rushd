@@ -36,24 +36,21 @@ export function StateEntryScreen({
   const canProceed = selectedStates.length > 0
 
   return (
-    <div className="flex min-h-screen flex-col bg-background pb-20">
+    <div className="flex min-h-screen flex-col bg-background pb-24">
       {/* Header */}
-      <header className="flex items-center px-5 pt-6 pb-2">
+      <header className="flex items-center px-6 pt-8 pb-2">
         <button
           onClick={onBack}
-          style={{ color: "#8A9AB5" }}
+          className="text-text-secondary"
           aria-label="Go back"
         >
-          <ArrowLeft className="h-4 w-4" strokeWidth={1.5} />
+          <ArrowLeft className="h-5 w-5" strokeWidth={1.5} />
         </button>
       </header>
 
-      <main className="flex-1 px-5">
+      <main className="flex-1 px-6">
         {/* Heading -- 26px SemiBold left-aligned, no subheading */}
-        <h2
-          className="text-[26px] font-semibold tracking-tight mb-8"
-          style={{ color: "#F5F0E8" }}
-        >
+        <h2 className="text-2xl font-semibold tracking-tight mb-8 text-text-primary sm:text-3xl">
           {"What\u2019s pulling at you?"}
         </h2>
 
@@ -65,29 +62,21 @@ export function StateEntryScreen({
               <button
                 key={state.id}
                 onClick={() => onToggleState(state.id)}
-                className="group flex w-full items-center text-left transition-all"
-                style={{
-                  height: "56px",
-                  borderBottom:
-                    i < emotionalStates.length - 1
-                      ? "1px solid #1E2A3A"
-                      : "none",
-                  backgroundColor: isSelected ? "#162035" : "transparent",
-                }}
+                className={`group flex w-full items-center text-left transition-all h-14 ${
+                  i < emotionalStates.length - 1 ? "border-b border-divider" : ""
+                } ${isSelected ? "bg-elevated" : "bg-transparent"}`}
                 aria-pressed={isSelected}
               >
                 {/* Gold left indicator */}
                 <div
-                  className="w-[3px] self-stretch transition-colors"
-                  style={{
-                    backgroundColor: isSelected ? "#C1A67B" : "transparent",
-                  }}
+                  className={`w-[3px] self-stretch transition-colors ${
+                    isSelected ? "bg-gold" : "bg-transparent"
+                  }`}
                 />
                 <span
-                  className="flex-1 px-4 text-[15px] font-medium transition-colors"
-                  style={{
-                    color: isSelected ? "#F5F0E8" : "#8A9AB5",
-                  }}
+                  className={`flex-1 px-4 text-base font-medium transition-colors ${
+                    isSelected ? "text-text-primary" : "text-text-secondary"
+                  }`}
                 >
                   {state.label}
                 </span>
@@ -103,11 +92,7 @@ export function StateEntryScreen({
             value={localFreeText}
             onChange={(e) => handleFreeTextChange(e.target.value)}
             placeholder="Or describe it directly\u2026"
-            className="w-full bg-transparent py-3 text-sm focus:outline-none"
-            style={{
-              color: "#F5F0E8",
-              borderBottom: "1px solid #1E2A3A",
-            }}
+            className="w-full bg-transparent py-4 text-base focus:outline-none text-text-primary border-b border-divider placeholder:text-text-secondary/50"
           />
         </div>
 
@@ -116,8 +101,7 @@ export function StateEntryScreen({
           <div className="mt-8 flex justify-end">
             <button
               onClick={onFindName}
-              className="group flex items-center gap-2 text-sm font-medium tracking-wide transition-colors"
-              style={{ color: "#C1A67B" }}
+              className="group flex items-center gap-2 text-base font-medium tracking-wide transition-colors text-gold"
             >
               <span>{"Find the Name \u2192"}</span>
             </button>

@@ -110,7 +110,7 @@ export function RushdApp() {
   }, [])
 
   return (
-    <div className="relative mx-auto min-h-screen max-w-md" style={{ backgroundColor: "#0B1120" }}>
+    <div className="relative mx-auto min-h-screen w-full max-w-lg bg-background lg:max-w-xl">
       {screen === "home" && (
         <HomeScreen dailyName={dailyName} onNavigate={handleNavigate} />
       )}

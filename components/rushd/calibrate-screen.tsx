@@ -111,8 +111,8 @@ export function CalibrateScreen({ onCrisis, onGoDeeper }: CalibrateScreenProps) 
   // INPUT STATE
   if (phase === "input" || phase === "vague") {
     return (
-      <div className="flex min-h-screen flex-col bg-background pb-20">
-        <div className="flex flex-1 flex-col justify-center px-5">
+      <div className="flex min-h-screen flex-col bg-background pb-24">
+        <div className="flex flex-1 flex-col justify-center px-6">
           {/* Single field, full width, centered vertically */}
           <textarea
             value={input}
@@ -124,24 +124,17 @@ export function CalibrateScreen({ onCrisis, onGoDeeper }: CalibrateScreenProps) 
                 ? "Can you say more about what\u2019s actually happening for you right now?"
                 : "What\u2019s happening?"
             }
-            className="w-full resize-none bg-transparent text-lg font-medium focus:outline-none"
-            style={{
-              color: "#F5F0E8",
-              borderBottom: "1px solid #1E2A3A",
-              caretColor: "#C1A67B",
-            }}
+            className="w-full resize-none bg-transparent text-xl font-medium focus:outline-none text-text-primary border-b border-divider placeholder:text-text-secondary/50"
+            style={{ caretColor: "var(--gold)" }}
             autoFocus
           />
-          <p
-            className="mt-3 text-sm italic"
-            style={{ color: "#8A9AB5" }}
-          >
+          <p className="mt-4 text-base italic text-text-secondary">
             Describe your situation, your feeling, or what weighing on you. Be direct.
           </p>
 
           {/* Character count -- understated */}
-          <div className="mt-2 flex items-center justify-between">
-            <span className="text-[11px] tabular-nums" style={{ color: "#8A9AB5", opacity: 0.4 }}>
+          <div className="mt-3 flex items-center justify-between">
+            <span className="text-xs tabular-nums text-text-secondary/40">
               {input.length}/500
             </span>
 
@@ -149,11 +142,10 @@ export function CalibrateScreen({ onCrisis, onGoDeeper }: CalibrateScreenProps) 
             {input.trim().length > 0 && (
               <button
                 onClick={handleSubmit}
-                className="flex h-10 w-10 items-center justify-center transition-colors"
-                style={{ color: "#C1A67B" }}
+                className="flex h-12 w-12 items-center justify-center transition-colors text-gold"
                 aria-label="Submit"
               >
-                <svg viewBox="0 0 16 16" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <svg viewBox="0 0 16 16" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.5">
                   <path d="M3 8h10M9 4l4 4-4 4" />
                 </svg>
               </button>
@@ -167,8 +159,8 @@ export function CalibrateScreen({ onCrisis, onGoDeeper }: CalibrateScreenProps) 
   // PROCESSING STATE
   if (phase === "processing") {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-background pb-20">
-        <p className="text-sm" style={{ color: "#8A9AB5" }}>
+      <div className="flex min-h-screen flex-col items-center justify-center bg-background pb-24">
+        <p className="text-base text-text-secondary">
           Finding the Name...
         </p>
       </div>
@@ -178,17 +170,13 @@ export function CalibrateScreen({ onCrisis, onGoDeeper }: CalibrateScreenProps) 
   // SCHOLAR REQUIRED
   if (phase === "scholar") {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-background px-6 pb-20">
-        <p
-          className="text-lg font-medium text-center mb-8"
-          style={{ color: "#F5F0E8" }}
-        >
+      <div className="flex min-h-screen flex-col items-center justify-center bg-background px-6 pb-24">
+        <p className="text-xl font-medium text-center mb-8 text-text-primary">
           {errorMessage}
         </p>
         <button
           onClick={handleReset}
-          className="text-sm font-medium tracking-wide"
-          style={{ color: "#C1A67B" }}
+          className="text-base font-medium tracking-wide text-gold"
         >
           {"Try something else \u2192"}
         </button>
@@ -199,14 +187,13 @@ export function CalibrateScreen({ onCrisis, onGoDeeper }: CalibrateScreenProps) 
   // ERROR STATE
   if (phase === "error") {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-background px-6 pb-20">
-        <p className="text-sm mb-6" style={{ color: "#8A9AB5" }}>
+      <div className="flex min-h-screen flex-col items-center justify-center bg-background px-6 pb-24">
+        <p className="text-base mb-6 text-text-secondary">
           {errorMessage}
         </p>
         <button
           onClick={handleReset}
-          className="text-sm font-medium tracking-wide"
-          style={{ color: "#C1A67B" }}
+          className="text-base font-medium tracking-wide text-gold"
         >
           {"Start over \u2192"}
         </button>
@@ -217,168 +204,131 @@ export function CalibrateScreen({ onCrisis, onGoDeeper }: CalibrateScreenProps) 
   // OUTPUT STATE -- structured Name delivery
   if (phase === "output" && result) {
     return (
-      <div className="flex min-h-screen flex-col bg-background pb-20">
-        <main className="flex-1 overflow-y-auto px-5 pt-6">
+      <div className="flex min-h-screen flex-col bg-background pb-24">
+        <main className="flex-1 overflow-y-auto px-6 pt-8">
           {/* WHAT YOU SHARED */}
-          <p
-            className="text-[10px] font-semibold tracking-[0.3em] uppercase mb-3"
-            style={{ color: "#8A9AB5" }}
-          >
+          <p className="text-xs font-semibold tracking-[0.3em] uppercase mb-3 text-text-secondary">
             What you shared
           </p>
-          <div className="py-3 px-4 mb-6" style={{ backgroundColor: "#162035" }}>
-            <p className="text-sm italic leading-relaxed" style={{ color: "#F5F0E8", opacity: 0.8 }}>
+          <div className="py-4 px-5 mb-6 bg-elevated">
+            <p className="text-base italic leading-relaxed text-text-primary/80">
               {input}
             </p>
           </div>
 
           {/* Thin rule */}
-          <div className="h-px" style={{ backgroundColor: "#1E2A3A" }} />
+          <div className="h-px bg-divider" />
 
           {/* THE NAME */}
           <div className="py-6">
-            <p
-              className="text-[10px] font-semibold tracking-[0.3em] uppercase mb-4"
-              style={{ color: "#C1A67B" }}
-            >
+            <p className="text-xs font-semibold tracking-[0.3em] uppercase mb-4 text-gold">
               The Name
             </p>
             <div className="flex items-start justify-between gap-4">
               <div className="flex-1">
-                <p
-                  className="text-sm font-medium tracking-wide"
-                  style={{ color: "#C1A67B" }}
-                >
+                <p className="text-base font-medium tracking-wide text-gold sm:text-lg">
                   {result.transliteration}
                 </p>
-                <p className="mt-0.5 text-sm" style={{ color: "#F5F0E8" }}>
+                <p className="mt-1 text-base text-text-primary">
                   {result.english}
                 </p>
-                <div className="mt-2 flex items-center gap-1.5">
-                  <ShieldCheck className="h-3 w-3" style={{ color: "#2D4A3E" }} />
-                  <span
-                    className="text-[10px] tracking-wide px-2 py-0.5"
-                    style={{ color: "#2D4A3E", backgroundColor: "rgba(45,74,62,0.15)" }}
-                  >
+                <div className="mt-3 flex items-center gap-2">
+                  <ShieldCheck className="h-4 w-4 text-green" />
+                  <span className="text-xs tracking-wide px-2 py-1 text-green bg-green/15">
                     Scholar verified
                   </span>
                 </div>
               </div>
               <p
-                className="leading-none"
+                className="font-serif leading-none text-arabic text-5xl sm:text-6xl"
                 dir="rtl"
                 lang="ar"
-                style={{
-                  fontFamily: "'Amiri', serif",
-                  fontSize: "52px",
-                  color: "#F5F0E8",
-                }}
               >
                 {result.arabic}
               </p>
             </div>
           </div>
 
-          <div className="h-px" style={{ backgroundColor: "#1E2A3A" }} />
+          <div className="h-px bg-divider" />
 
           {/* WHY THIS NAME */}
           <div className="py-6">
-            <p
-              className="text-[10px] font-semibold tracking-[0.3em] uppercase mb-3"
-              style={{ color: "#8A9AB5" }}
-            >
+            <p className="text-xs font-semibold tracking-[0.3em] uppercase mb-3 text-text-secondary">
               Why this Name
             </p>
-            <p className="text-sm leading-relaxed" style={{ color: "#F5F0E8", opacity: 0.9 }}>
+            <p className="text-base leading-relaxed text-text-primary/90">
               {result.why}
             </p>
           </div>
 
-          <div className="h-px" style={{ backgroundColor: "#1E2A3A" }} />
+          <div className="h-px bg-divider" />
 
           {/* THREE LAYERS -- condensed */}
-          <div className="py-6 flex flex-col gap-5">
+          <div className="py-6 flex flex-col gap-6">
             <div>
-              <p
-                className="text-[10px] font-semibold tracking-[0.3em] uppercase mb-2"
-                style={{ color: "#8A9AB5" }}
-              >
+              <p className="text-xs font-semibold tracking-[0.3em] uppercase mb-2 text-text-secondary">
                 Know
               </p>
-              <p className="text-sm leading-relaxed" style={{ color: "#F5F0E8", opacity: 0.9 }}>
+              <p className="text-base leading-relaxed text-text-primary/90">
                 {result.know}
               </p>
             </div>
             <div>
-              <p
-                className="text-[10px] font-semibold tracking-[0.3em] uppercase mb-2"
-                style={{ color: "#8A9AB5" }}
-              >
+              <p className="text-xs font-semibold tracking-[0.3em] uppercase mb-2 text-text-secondary">
                 Feel
               </p>
-              <p className="text-sm leading-relaxed" style={{ color: "#F5F0E8", opacity: 0.9 }}>
+              <p className="text-base leading-relaxed text-text-primary/90">
                 {result.feel}
               </p>
             </div>
             <div>
-              <p
-                className="text-[10px] font-semibold tracking-[0.3em] uppercase mb-2"
-                style={{ color: "#8A9AB5" }}
-              >
+              <p className="text-xs font-semibold tracking-[0.3em] uppercase mb-2 text-text-secondary">
                 Live
               </p>
-              <div className="py-2.5 px-4" style={{ borderLeft: "3px solid #C1A67B" }}>
-                <p className="text-sm leading-relaxed" style={{ color: "#F5F0E8" }}>
+              <div className="py-4 px-5 border-l-[3px] border-gold">
+                <p className="text-base leading-relaxed text-text-primary">
                   {result.live}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="h-px" style={{ backgroundColor: "#1E2A3A" }} />
+          <div className="h-px bg-divider" />
 
           {/* DU'A + ACTION */}
           <div className="py-6">
-            <p
-              className="text-[10px] font-semibold tracking-[0.3em] uppercase mb-3"
-              style={{ color: "#8A9AB5" }}
-            >
+            <p className="text-xs font-semibold tracking-[0.3em] uppercase mb-3 text-text-secondary">
               {"Du\u2019a"}
             </p>
-            <p className="text-sm italic leading-relaxed" style={{ color: "#F5F0E8", opacity: 0.8 }}>
+            <p className="text-base italic leading-relaxed text-text-primary/80">
               {result.dua}
             </p>
           </div>
 
-          <div className="h-px" style={{ backgroundColor: "#1E2A3A" }} />
+          <div className="h-px bg-divider" />
 
           <div className="py-6">
-            <p
-              className="text-[10px] font-semibold tracking-[0.3em] uppercase mb-3"
-              style={{ color: "#8A9AB5" }}
-            >
+            <p className="text-xs font-semibold tracking-[0.3em] uppercase mb-3 text-text-secondary">
               One action
             </p>
-            <p className="text-sm leading-relaxed font-semibold" style={{ color: "#F5F0E8" }}>
+            <p className="text-base leading-relaxed font-semibold text-text-primary">
               {result.action}
             </p>
           </div>
 
-          <div className="h-px" style={{ backgroundColor: "#1E2A3A" }} />
+          <div className="h-px bg-divider" />
 
           {/* Bottom actions */}
           <div className="flex items-center justify-between py-6">
             <button
               onClick={() => onGoDeeper(result.transliteration)}
-              className="text-sm font-medium tracking-wide"
-              style={{ color: "#C1A67B" }}
+              className="text-base font-medium tracking-wide text-gold"
             >
               {"Go deeper \u2192"}
             </button>
             <button
               onClick={handleReset}
-              className="text-sm font-medium tracking-wide"
-              style={{ color: "#8A9AB5" }}
+              className="text-base font-medium tracking-wide text-text-secondary"
             >
               {"New calibration \u2192"}
             </button>

@@ -35,15 +35,11 @@ const navItems: { screen: Screen; icon: typeof Home | typeof DiamondIcon; label:
 export function BottomNav({ currentScreen, onNavigate }: BottomNavProps) {
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-50"
-      style={{
-        backgroundColor: "#0B1120",
-        borderTop: "1px solid #1E2A3A",
-      }}
+      className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-divider"
       role="navigation"
       aria-label="Main navigation"
     >
-      <div className="mx-auto flex max-w-md items-center justify-around py-3">
+      <div className="mx-auto flex max-w-lg items-center justify-around py-4 lg:max-w-xl">
         {navItems.map((item) => {
           const isActive =
             currentScreen === item.screen ||
@@ -55,18 +51,17 @@ export function BottomNav({ currentScreen, onNavigate }: BottomNavProps) {
             <button
               key={item.screen}
               onClick={() => onNavigate(item.screen)}
-              className="flex flex-col items-center gap-1 min-w-[44px] min-h-[44px] justify-center transition-colors"
-              style={{
-                color: isActive ? "#C1A67B" : "#8A9AB5",
-              }}
+              className={`flex flex-col items-center gap-1.5 min-w-[48px] min-h-[48px] justify-center transition-colors ${
+                isActive ? "text-gold" : "text-text-secondary"
+              }`}
               aria-current={isActive ? "page" : undefined}
               aria-label={item.label}
             >
               <item.icon
-                className="h-5 w-5"
+                className="h-6 w-6"
                 strokeWidth={isActive ? 2 : 1.5}
               />
-              <span className="text-[9px] font-medium tracking-wider uppercase">
+              <span className="text-[10px] font-medium tracking-wider uppercase">
                 {item.label}
               </span>
             </button>

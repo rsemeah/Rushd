@@ -27,50 +27,39 @@ export function StudyScreen({ name, onBack }: StudyScreenProps) {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-background pb-20">
+    <div className="flex min-h-screen flex-col bg-background pb-24">
       {/* Header */}
-      <header className="flex items-center px-5 pt-6 pb-4">
+      <header className="flex items-center px-6 pt-8 pb-4">
         <button
           onClick={onBack}
-          style={{ color: "#8A9AB5" }}
+          className="text-text-secondary"
           aria-label="Go back"
         >
-          <ArrowLeft className="h-4 w-4" strokeWidth={1.5} />
+          <ArrowLeft className="h-5 w-5" strokeWidth={1.5} />
         </button>
       </header>
 
       {/* Persistent Name header */}
-      <div className="px-5 pb-4">
+      <div className="px-6 pb-4">
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1">
-            <p
-              className="text-sm font-medium tracking-wide"
-              style={{ color: "#C1A67B" }}
-            >
+            <p className="text-base font-medium tracking-wide text-gold sm:text-lg">
               {name.transliteration}
             </p>
-            <p className="mt-0.5 text-sm" style={{ color: "#F5F0E8" }}>
+            <p className="mt-1 text-base text-text-primary">
               {name.meaning}
             </p>
-            <div className="mt-2 flex items-center gap-1.5">
-              <ShieldCheck className="h-3 w-3" style={{ color: "#2D4A3E" }} />
-              <span
-                className="text-[10px] tracking-wide px-2 py-0.5"
-                style={{ color: "#2D4A3E", backgroundColor: "rgba(45,74,62,0.15)" }}
-              >
+            <div className="mt-3 flex items-center gap-2">
+              <ShieldCheck className="h-4 w-4 text-green" />
+              <span className="text-xs tracking-wide px-2 py-1 text-green bg-green/15">
                 {name.scholar}
               </span>
             </div>
           </div>
           <p
-            className="leading-none"
+            className="font-serif leading-none text-arabic text-5xl sm:text-6xl"
             dir="rtl"
             lang="ar"
-            style={{
-              fontFamily: "'Amiri', serif",
-              fontSize: "52px",
-              color: "#F5F0E8",
-            }}
           >
             {name.arabic}
           </p>
@@ -78,19 +67,19 @@ export function StudyScreen({ name, onBack }: StudyScreenProps) {
       </div>
 
       {/* Divider */}
-      <div className="h-px" style={{ backgroundColor: "#1E2A3A" }} />
+      <div className="h-px bg-divider" />
 
       {/* Tabs */}
-      <div className="flex px-5 pt-4 gap-6">
+      <div className="flex px-6 pt-5 gap-8">
         {(["know", "feel", "live"] as Tab[]).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
-            className="pb-2 text-[11px] font-semibold tracking-[0.2em] uppercase transition-colors"
-            style={{
-              color: tab === t ? "#C1A67B" : "#8A9AB5",
-              borderBottom: tab === t ? "1px solid #C1A67B" : "1px solid transparent",
-            }}
+            className={`pb-2 text-xs font-semibold tracking-[0.2em] uppercase transition-colors border-b ${
+              tab === t
+                ? "text-gold border-gold"
+                : "text-text-secondary border-transparent"
+            }`}
           >
             {t}
           </button>
@@ -98,7 +87,7 @@ export function StudyScreen({ name, onBack }: StudyScreenProps) {
       </div>
 
       {/* Tab content */}
-      <div className="flex-1 overflow-y-auto px-5 pt-6 pb-4">
+      <div className="flex-1 overflow-y-auto px-6 pt-6 pb-4">
         {tab === "know" && <KnowTab name={name} />}
         {tab === "feel" && <FeelTab name={name} />}
         {tab === "live" && <LiveTab name={name} stages={stages} toggleStage={toggleStage} />}
@@ -109,10 +98,7 @@ export function StudyScreen({ name, onBack }: StudyScreenProps) {
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p
-      className="text-[10px] font-semibold tracking-[0.3em] uppercase mb-3"
-      style={{ color: "#8A9AB5" }}
-    >
+    <p className="text-xs font-semibold tracking-[0.3em] uppercase mb-3 text-text-secondary">
       {children}
     </p>
   )
@@ -120,14 +106,14 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 
 function SectionText({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-sm leading-relaxed" style={{ color: "#F5F0E8", opacity: 0.9 }}>
+    <p className="text-base leading-relaxed text-text-primary opacity-90">
       {children}
     </p>
   )
 }
 
 function Divider() {
-  return <div className="h-px my-6" style={{ backgroundColor: "#1E2A3A" }} />
+  return <div className="h-px my-6 bg-divider" />
 }
 
 function KnowTab({ name }: { name: NameOfAllah }) {
@@ -141,15 +127,14 @@ function KnowTab({ name }: { name: NameOfAllah }) {
       <Divider />
       <SectionLabel>{"Qur\u2019anic occurrences"}</SectionLabel>
       <p
-        className="text-lg leading-relaxed"
+        className="text-xl leading-relaxed font-serif text-arabic"
         dir="rtl"
         lang="ar"
-        style={{ fontFamily: "'Amiri', serif", color: "#F5F0E8" }}
       >
         {name.quranicRef.split(" \u2014 ")[0]}
       </p>
       {name.quranicRef.includes(" \u2014 ") && (
-        <p className="mt-1 text-xs" style={{ color: "#8A9AB5" }}>
+        <p className="mt-2 text-sm text-text-secondary">
           {name.quranicRef.split(" \u2014 ").slice(1).join(" \u2014 ")}
         </p>
       )}
@@ -164,36 +149,27 @@ function FeelTab({ name }: { name: NameOfAllah }) {
   return (
     <>
       {/* Central question */}
-      <p className="text-xl font-medium text-center mb-6" style={{ color: "#F5F0E8" }}>
+      <p className="text-xl font-medium text-center mb-6 text-text-primary sm:text-2xl">
         {name.feelQuestion}
       </p>
       <SectionText>{name.feelAnswer}</SectionText>
       <Divider />
       <SectionLabel>Where you feel this</SectionLabel>
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-6">
         <div>
-          <p
-            className="text-[10px] font-semibold tracking-[0.2em] uppercase mb-1"
-            style={{ color: "#C1A67B" }}
-          >
+          <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-2 text-gold">
             In your work
           </p>
           <SectionText>{name.feelWork}</SectionText>
         </div>
         <div>
-          <p
-            className="text-[10px] font-semibold tracking-[0.2em] uppercase mb-1"
-            style={{ color: "#C1A67B" }}
-          >
+          <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-2 text-gold">
             In your relationships
           </p>
           <SectionText>{name.feelRelationships}</SectionText>
         </div>
         <div>
-          <p
-            className="text-[10px] font-semibold tracking-[0.2em] uppercase mb-1"
-            style={{ color: "#C1A67B" }}
-          >
+          <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-2 text-gold">
             In your self-talk
           </p>
           <SectionText>{name.feelSelfTalk}</SectionText>
@@ -224,19 +200,18 @@ function LiveTab({
   return (
     <>
       {/* Central question */}
-      <p className="text-xl font-medium text-center mb-6" style={{ color: "#F5F0E8" }}>
+      <p className="text-xl font-medium text-center mb-6 text-text-primary sm:text-2xl">
         {name.liveQuestion}
       </p>
 
       {/* Behavioral statements with gold left border */}
-      <div className="flex flex-col gap-3 mb-6">
+      <div className="flex flex-col gap-4 mb-6">
         {name.liveStatements.map((stmt, i) => (
           <div
             key={i}
-            className="py-3 px-4"
-            style={{ borderLeft: "3px solid #C1A67B", backgroundColor: "rgba(17,30,50,0.5)" }}
+            className="py-4 px-5 border-l-[3px] border-gold bg-surface/50"
           >
-            <p className="text-sm leading-relaxed" style={{ color: "#F5F0E8" }}>
+            <p className="text-base leading-relaxed text-text-primary">
               {stmt}
             </p>
           </div>
@@ -248,21 +223,16 @@ function LiveTab({
       {/* Dhikr */}
       <SectionLabel>Dhikr</SectionLabel>
       <p
-        className="text-center leading-none"
+        className="text-center leading-none font-serif text-gold text-4xl"
         dir="rtl"
         lang="ar"
-        style={{
-          fontFamily: "'Amiri', serif",
-          fontSize: "36px",
-          color: "#C1A67B",
-        }}
       >
         {name.dhikr}
       </p>
-      <p className="text-center mt-1 text-xs" style={{ color: "#8A9AB5" }}>
+      <p className="text-center mt-2 text-sm text-text-secondary">
         {name.dhikrTransliteration}
       </p>
-      <p className="text-center mt-3 text-sm italic" style={{ color: "#F5F0E8", opacity: 0.8 }}>
+      <p className="text-center mt-4 text-base italic text-text-primary opacity-80">
         {name.dua}
       </p>
 
@@ -270,7 +240,7 @@ function LiveTab({
 
       {/* One action */}
       <SectionLabel>One action</SectionLabel>
-      <p className="text-sm leading-relaxed font-semibold" style={{ color: "#F5F0E8" }}>
+      <p className="text-base leading-relaxed font-semibold text-text-primary">
         {name.action}
       </p>
 
@@ -278,32 +248,30 @@ function LiveTab({
 
       {/* Ahsaha stages */}
       <SectionLabel>{"A\u1E25\u1E63\u0101h\u0101 stages"}</SectionLabel>
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-2 gap-3">
         {stageLabels.map(({ key, label }) => (
           <button
             key={key}
             onClick={() => toggleStage(key)}
-            className="flex items-center gap-2 py-2 px-3 text-left transition-colors"
-            style={{
-              backgroundColor: stages[key] ? "rgba(193,166,123,0.1)" : "transparent",
-              border: `1px solid ${stages[key] ? "#C1A67B" : "#1E2A3A"}`,
-            }}
+            className={`flex items-center gap-3 py-3 px-4 text-left transition-colors border ${
+              stages[key]
+                ? "bg-gold/10 border-gold"
+                : "bg-transparent border-divider"
+            }`}
           >
             <div
-              className="flex h-4 w-4 items-center justify-center shrink-0"
-              style={{
-                border: `1px solid ${stages[key] ? "#C1A67B" : "#8A9AB5"}`,
-              }}
+              className={`flex h-5 w-5 items-center justify-center shrink-0 border ${
+                stages[key] ? "border-gold" : "border-text-secondary"
+              }`}
             >
               {stages[key] && (
-                <svg viewBox="0 0 12 12" className="h-2.5 w-2.5" fill="none">
-                  <path d="M2 6l3 3 5-5" stroke="#C1A67B" strokeWidth="1.5" />
+                <svg viewBox="0 0 12 12" className="h-3 w-3" fill="none">
+                  <path d="M2 6l3 3 5-5" className="stroke-gold" strokeWidth="1.5" />
                 </svg>
               )}
             </div>
             <span
-              className="text-xs"
-              style={{ color: stages[key] ? "#C1A67B" : "#8A9AB5" }}
+              className={`text-sm ${stages[key] ? "text-gold" : "text-text-secondary"}`}
             >
               {label}
             </span>
