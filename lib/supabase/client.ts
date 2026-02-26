@@ -22,24 +22,16 @@ export function createClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-  console.log('[v0] Browser client - URL exists:', !!supabaseUrl)
-  console.log('[v0] Browser client - Key exists:', !!supabaseAnonKey)
-
   // Check if env vars exist and are non-empty
   if (!supabaseUrl || !supabaseAnonKey || supabaseUrl.trim() === '' || supabaseAnonKey.trim() === '') {
-    console.log('[v0] Supabase not configured, returning mock client')
     return mockClient
   }
 
-  // Validate URL format
+  // Validate URL format - must start with https://
   const trimmedUrl = supabaseUrl.trim()
-  try {
-    new URL(trimmedUrl)
-  } catch {
-    console.log('[v0] Invalid Supabase URL format:', trimmedUrl)
+  if (!trimmedUrl.startsWith('https://')) {
     return mockClient
   }
 
-  console.log('[v0] Creating real Supabase browser client')
   return createBrowserClient(trimmedUrl, supabaseAnonKey.trim())
 }

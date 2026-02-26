@@ -28,11 +28,9 @@ export async function createClient() {
     return mockClient
   }
 
-  // Validate URL format
+  // Validate URL format - must start with https://
   const trimmedUrl = supabaseUrl.trim()
-  try {
-    new URL(trimmedUrl)
-  } catch {
+  if (!trimmedUrl.startsWith('https://')) {
     return mockClient
   }
 
